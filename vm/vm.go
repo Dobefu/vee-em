@@ -11,6 +11,8 @@ type VM struct {
 	registers [32]int64
 	// The bytecode of the program to execute.
 	program []byte
+	stack   [1024]int64
+	sp      register
 }
 
 // New creates a new VM instance.
@@ -19,6 +21,8 @@ func New(program []byte) *VM {
 		pc:        0,
 		registers: [32]int64{},
 		program:   program,
+		stack:     [1024]int64{},
+		sp:        0,
 	}
 
 	return vm
