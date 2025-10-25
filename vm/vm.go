@@ -1,7 +1,7 @@
 // Package vm provides the VM struct.
 package vm
 
-type register = uint32
+type register = uint64
 
 // VM defines the virtual machine.
 type VM struct {
@@ -11,8 +11,10 @@ type VM struct {
 	registers [32]int64
 	// The bytecode of the program to execute.
 	program []byte
-	stack   [1024]int64
-	sp      register
+	// The stack of the virtual machine.
+	stack [1024]int64
+	// The stack pointer of the virtual machine.
+	sp register
 }
 
 // New creates a new VM instance.

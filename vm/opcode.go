@@ -12,6 +12,9 @@ const (
 	// OpcodePop pops a value off the stack.
 	OpcodePop
 
+	// OpcodeLoadImmediate loads an immediate value into a register.
+	OpcodeLoadImmediate
+
 	// OpcodeAdd adds two values from the stack.
 	OpcodeAdd
 	// OpcodeSub subtracts two values from the stack.

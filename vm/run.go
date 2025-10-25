@@ -8,7 +8,7 @@ import (
 
 // Run runs the VM.
 func (v *VM) Run() error {
-	for int(v.pc) < len(v.program) {
+	for v.pc < uint64(len(v.program)) {
 		opcode, dest, src1, src2 := v.decodeInstruction()
 
 		switch opcode {
@@ -16,7 +16,7 @@ func (v *VM) Run() error {
 			// noop
 
 		case OpcodePush:
-			if int(v.sp) >= len(v.stack) {
+			if v.sp >= uint64(len(v.stack)) {
 				return errors.New("stack overflow")
 			}
 
@@ -30,6 +30,11 @@ func (v *VM) Run() error {
 
 			v.registers[dest] = v.stack[v.sp-1]
 			v.sp--
+
+		case OpcodeLoadImmediate:
+			highByte := int64(v.program[v.pc+2]) << 8
+			lowByte := int64(v.program[v.pc+3])
+			v.registers[dest] = highByte | lowByte
 
 		case OpcodeAdd:
 			v.registers[dest] = v.registers[src1] + v.registers[src2]
