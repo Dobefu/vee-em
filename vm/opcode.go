@@ -16,4 +16,10 @@ const (
 	OpcodeAdd
 	// OpcodeSub subtracts two values from the stack.
 	OpcodeSub
+	// OpcodeMul multiplies two values from the stack.
+	OpcodeMul
+	// OpcodeDiv divides two values from the stack.
+	OpcodeDiv
+	// OpcodeMod takes the modulo of two values from the stack.
+	OpcodeMod
 )

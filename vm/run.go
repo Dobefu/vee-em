@@ -37,6 +37,23 @@ func (v *VM) Run() error {
 		case OpcodeSub:
 			v.registers[dest] = v.registers[src1] - v.registers[src2]
 
+		case OpcodeMul:
+			v.registers[dest] = v.registers[src1] * v.registers[src2]
+
+		case OpcodeDiv:
+			if v.registers[src2] == 0 {
+				return errors.New("division by zero")
+			}
+
+			v.registers[dest] = v.registers[src1] / v.registers[src2]
+
+		case OpcodeMod:
+			if v.registers[src2] == 0 {
+				return errors.New("modulo by zero")
+			}
+
+			v.registers[dest] = v.registers[src1] % v.registers[src2]
+
 		default:
 			return fmt.Errorf("unknown opcode: %08b", opcode)
 		}
