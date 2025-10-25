@@ -1,7 +1,6 @@
 package vm
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -31,14 +30,7 @@ func (v *VM) Run() error {
 			instructionErr = v.instructionPush(src1)
 
 		case OpcodePop:
-			if v.sp == 0 {
-				instructionErr = errors.New("stack underflow")
-
-				break
-			}
-
-			v.registers[dest] = v.stack[v.sp-1]
-			v.sp--
+			instructionErr = v.instructionPop(dest)
 
 		case OpcodeLoadImmediate:
 			highByte := int64(v.program[v.pc+2]) << 8
