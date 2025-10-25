@@ -14,7 +14,11 @@ func (v *VM) Run() error {
 	}
 
 	for v.pc < uint64(len(v.program)) {
-		opcode, dest, src1, src2 := v.decodeInstruction()
+		opcode, dest, src1, src2, err := v.decodeInstruction()
+
+		if err != nil {
+			return err
+		}
 
 		switch opcode {
 		case OpcodeNop:
