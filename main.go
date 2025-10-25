@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	vm.New()
+	vm.New([]byte{})
 }
