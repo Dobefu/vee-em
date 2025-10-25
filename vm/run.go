@@ -28,14 +28,7 @@ func (v *VM) Run() error {
 			// noop
 
 		case OpcodePush:
-			if v.sp >= uint64(len(v.stack)) {
-				instructionErr = errors.New("stack overflow")
-
-				break
-			}
-
-			v.stack[v.sp] = v.registers[src1]
-			v.sp++
+			instructionErr = v.instructionPush(src1)
 
 		case OpcodePop:
 			if v.sp == 0 {
