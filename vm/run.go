@@ -36,6 +36,9 @@ func (v *VM) Run() error {
 
 		case OpcodeSub:
 			v.registers[dest] = v.registers[src1] - v.registers[src2]
+
+		default:
+			return fmt.Errorf("unknown opcode: %08b", opcode)
 		}
 
 		_, _ = fmt.Fprintf(os.Stdout, "Registers before: %v\n", v.registers)
