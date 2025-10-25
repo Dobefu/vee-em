@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	err := vm.New([]byte{3, 0, 0, 0}).Run()
+	err := vm.New([]byte{}).Run()
 
 	if err != nil {
 		log.Fatalf("Failed to run VM: %s\n", err.Error())

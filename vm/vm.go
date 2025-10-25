@@ -3,6 +3,9 @@ package vm
 
 type register = uint64
 
+// StackSize is the size of the stack in bytes.
+const StackSize = 1024
+
 // VM defines the virtual machine.
 type VM struct {
 	// The program counter.
@@ -12,7 +15,7 @@ type VM struct {
 	// The bytecode of the program to execute.
 	program []byte
 	// The stack of the virtual machine.
-	stack [1024]int64
+	stack [StackSize]int64
 	// The stack pointer of the virtual machine.
 	sp register
 }
@@ -23,7 +26,7 @@ func New(program []byte) *VM {
 		pc:        0,
 		registers: [32]int64{},
 		program:   program,
-		stack:     [1024]int64{},
+		stack:     [StackSize]int64{},
 		sp:        0,
 	}
 
