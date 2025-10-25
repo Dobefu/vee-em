@@ -14,10 +14,13 @@ func (v *VM) Run() error {
 	}
 
 	for v.pc < uint64(len(v.program)) {
+		var instructionErr error
+
 		opcode, dest, src1, src2, err := v.decodeInstruction()
 
 		if err != nil {
-			return err
+			instructionErr = err
+			opcode = OpcodeNop
 		}
 
 		switch opcode {
@@ -26,7 +29,9 @@ func (v *VM) Run() error {
 
 		case OpcodePush:
 			if v.sp >= uint64(len(v.stack)) {
-				return errors.New("stack overflow")
+				instructionErr = errors.New("stack overflow")
+
+				break
 			}
 
 			v.stack[v.sp] = v.registers[src1]
@@ -34,7 +39,9 @@ func (v *VM) Run() error {
 
 		case OpcodePop:
 			if v.sp == 0 {
-				return errors.New("stack underflow")
+				instructionErr = errors.New("stack underflow")
+
+				break
 			}
 
 			v.registers[dest] = v.stack[v.sp-1]
@@ -55,21 +62,23 @@ func (v *VM) Run() error {
 			v.registers[dest] = v.registers[src1] * v.registers[src2]
 
 		case OpcodeDiv:
-			if v.registers[src2] == 0 {
-				return errors.New("division by zero")
-			}
-
-			v.registers[dest] = v.registers[src1] / v.registers[src2]
+			instructionErr = v.instructionDiv(dest, src1, src2)
 
 		case OpcodeMod:
 			if v.registers[src2] == 0 {
-				return errors.New("modulo by zero")
+				instructionErr = errors.New("modulo by zero")
+
+				break
 			}
 
 			v.registers[dest] = v.registers[src1] % v.registers[src2]
 
 		default:
-			return fmt.Errorf("unknown opcode: %08b", opcode)
+			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
+		}
+
+		if instructionErr != nil {
+			return instructionErr
 		}
 
 		v.incrementPC()
