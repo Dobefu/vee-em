@@ -1,6 +1,8 @@
 package vm
 
-import "errors"
+import (
+	"errors"
+)
 
 func (v *VM) instructionDiv(dest register, src1 register, src2 register) error {
 	if v.registers[src2] == 0 {

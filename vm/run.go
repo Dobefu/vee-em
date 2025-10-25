@@ -65,13 +65,7 @@ func (v *VM) Run() error {
 			instructionErr = v.instructionDiv(dest, src1, src2)
 
 		case OpcodeMod:
-			if v.registers[src2] == 0 {
-				instructionErr = errors.New("modulo by zero")
-
-				break
-			}
-
-			v.registers[dest] = v.registers[src1] % v.registers[src2]
+			instructionErr = v.instructionMod(dest, src1, src2)
 
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
