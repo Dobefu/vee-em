@@ -3,11 +3,16 @@ package vm
 import (
 	"errors"
 	"fmt"
-	"os"
 )
 
 // Run runs the VM.
 func (v *VM) Run() error {
+	err := v.validateMagicHeader()
+
+	if err != nil {
+		return err
+	}
+
 	for v.pc < uint64(len(v.program)) {
 		opcode, dest, src1, src2 := v.decodeInstruction()
 
@@ -62,15 +67,6 @@ func (v *VM) Run() error {
 		default:
 			return fmt.Errorf("unknown opcode: %08b", opcode)
 		}
-
-		_, _ = fmt.Fprintf(os.Stdout, "Registers before: %v\n", v.registers)
-
-		_, _ = fmt.Fprintf(os.Stdout, "Opcode: %08b (%d)\n", opcode, opcode)
-		_, _ = fmt.Fprintf(os.Stdout, "Dest:   %08b (%d)\n", dest, dest)
-		_, _ = fmt.Fprintf(os.Stdout, "Src1:   %08b (%d)\n", src1, src1)
-		_, _ = fmt.Fprintf(os.Stdout, "Src2:   %08b (%d)\n", src2, src2)
-
-		_, _ = fmt.Fprintf(os.Stdout, "Registers after:  %v\n", v.registers)
 
 		v.incrementPC()
 	}
