@@ -123,8 +123,30 @@ func TestRunErr(t *testing.T) {
 		expected error
 	}{
 		{
+			name:     "missing magic header",
+			program:  []byte{},
+			expected: errors.New("invalid magic header"),
+		},
+		{
+			name: "invalid magic header",
+			program: []byte{
+				0xFF,
+				byte(OpcodeNop), 0, 0, 0,
+			},
+			expected: errors.New("invalid magic header"),
+		},
+		{
+			name: "unexpected end of program",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "division by zero",
 			program: []byte{
+				0x00,
 				byte(OpcodeLoadImmediate), 0, 0, 4,
 				byte(OpcodeLoadImmediate), 1, 0, 0,
 				byte(OpcodeDiv), 2, 0, 1,
@@ -134,6 +156,7 @@ func TestRunErr(t *testing.T) {
 		{
 			name: "modulo by zero",
 			program: []byte{
+				0x00,
 				byte(OpcodeLoadImmediate), 0, 0, 5,
 				byte(OpcodeLoadImmediate), 1, 0, 0,
 				byte(OpcodeMod), 2, 0, 1,
@@ -144,6 +167,7 @@ func TestRunErr(t *testing.T) {
 			name: "stack overflow",
 			program: func() []byte {
 				program := make([]byte, 0, StackSize*4)
+				program = append(program, 0x00)
 
 				for range StackSize + 1 {
 					program = append(program, byte(OpcodePush), 0, 0, 0)
@@ -156,6 +180,7 @@ func TestRunErr(t *testing.T) {
 		{
 			name: "stack underflow",
 			program: []byte{
+				0x00,
 				byte(OpcodePop), 0, 0, 0,
 			},
 			expected: errors.New("stack underflow"),
@@ -163,6 +188,7 @@ func TestRunErr(t *testing.T) {
 		{
 			name: "unknown opcode",
 			program: []byte{
+				0x00,
 				byte(255), 0, 0, 0,
 			},
 			expected: errors.New("unknown opcode: 11111111"),
@@ -173,7 +199,7 @@ func TestRunErr(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			vm := New(test.program)
+			vm := New(test.program, WithMagicHeader([]byte{0x00}))
 			err := vm.Run()
 
 			if err == nil {
