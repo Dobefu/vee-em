@@ -39,6 +39,9 @@ func (v *VM) Run() error {
 		case OpcodeLoadImmediate:
 			instructionErr = v.instructionLoadImmediate(dest)
 
+		case OpcodeLoadRegister:
+			instructionErr = v.instructionLoadRegister(dest, rawSrc1)
+
 		case OpcodeAdd:
 			v.registers[dest] = v.registers[src1] + v.registers[src2]
 

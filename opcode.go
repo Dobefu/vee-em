@@ -14,6 +14,8 @@ const (
 
 	// OpcodeLoadImmediate loads an immediate value into a register.
 	OpcodeLoadImmediate
+	// OpcodeLoadRegister loads a value from a register into another register.
+	OpcodeLoadRegister
 
 	// OpcodeAdd adds two values from the stack.
 	OpcodeAdd
