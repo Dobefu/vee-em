@@ -34,8 +34,6 @@ jobs:
 
       - name: Lint the code
         uses: golangci/golangci-lint-action@v8
-        with:
-          version: v2.1
 
       - name: Create a test results directory
         run: mkdir test-results
