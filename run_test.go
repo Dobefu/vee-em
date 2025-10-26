@@ -29,6 +29,14 @@ func TestRun(t *testing.T) {
 			expected: [32]int64{1},
 		},
 		{
+			name: "load register",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 1,
+				byte(OpcodeLoadRegister), 1, 0, 0,
+			},
+			expected: [32]int64{1, 1},
+		},
+		{
 			name: "push",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 1,
@@ -165,6 +173,14 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeLoadImmediate),
 			},
 			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "load register source out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadRegister), 32, 0, 0,
+			},
+			expected: errors.New("register out of bounds"),
 		},
 		{
 			name: "division by zero",
