@@ -14,8 +14,12 @@ func (v *VM) Run() error {
 
 	for v.pc < uint64(len(v.program)) {
 		var instructionErr error
+		shouldIncrementPC := true
 
-		opcode, dest, src1, src2, err := v.decodeInstruction()
+		opcode, dest, rawSrc1, rawSrc2, err := v.decodeInstruction()
+
+		src1 := rawSrc1 & 0x1F
+		src2 := rawSrc2 & 0x1F
 
 		if err != nil {
 			instructionErr = err
@@ -52,6 +56,10 @@ func (v *VM) Run() error {
 		case OpcodeMod:
 			instructionErr = v.instructionMod(dest, src1, src2)
 
+		case OpcodeJmp:
+			instructionErr = v.instructionJmp(rawSrc1, rawSrc2)
+			shouldIncrementPC = false
+
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
 		}
@@ -60,7 +68,9 @@ func (v *VM) Run() error {
 			return instructionErr
 		}
 
-		v.incrementPC()
+		if shouldIncrementPC {
+			v.incrementPC()
+		}
 	}
 
 	return nil

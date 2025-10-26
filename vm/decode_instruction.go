@@ -7,8 +7,8 @@ import (
 func (v *VM) decodeInstruction() (
 	opcode Opcode,
 	dest register,
-	src1 register,
-	src2 register,
+	rawSrc1 register,
+	rawSrc2 register,
 	err error,
 ) {
 	if v.pc+3 >= register(len(v.program)) {
@@ -16,9 +16,9 @@ func (v *VM) decodeInstruction() (
 	}
 
 	opcode = Opcode(v.program[v.pc])
-	dest = register(v.program[v.pc+1] & 0x1F)
-	src1 = register(v.program[v.pc+2] & 0x1F)
-	src2 = register(v.program[v.pc+3] & 0x1F)
+	dest = register(v.program[v.pc+1])
+	rawSrc1 = register(v.program[v.pc+2])
+	rawSrc2 = register(v.program[v.pc+3])
 
-	return opcode, dest, src1, src2, nil
+	return opcode, dest, rawSrc1, rawSrc2, nil
 }

@@ -25,4 +25,7 @@ const (
 	OpcodeDiv
 	// OpcodeMod takes the modulo of two values from the stack.
 	OpcodeMod
+
+	// OpcodeJmp jumps to an address.
+	OpcodeJmp
 )

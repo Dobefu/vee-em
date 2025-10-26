@@ -90,6 +90,21 @@ func TestRun(t *testing.T) {
 			},
 			expected: [32]int64{5, 2, 1},
 		},
+		{
+			name: "jmp immediate",
+			program: []byte{
+				byte(OpcodeJmp), 0, 4, byte(ModeImmediate),
+			},
+			expected: [32]int64{},
+		},
+		{
+			name: "jmp register",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 8,
+				byte(OpcodeJmp), 0, 0, byte(ModeRegister),
+			},
+			expected: [32]int64{8},
+		},
 	}
 
 	for _, test := range tests {
@@ -192,6 +207,22 @@ func TestRunErr(t *testing.T) {
 				byte(255), 0, 0, 0,
 			},
 			expected: errors.New("unknown opcode: 11111111"),
+		},
+		{
+			name: "jmp target out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmp), 0, 255, byte(ModeImmediate),
+			},
+			expected: errors.New("target address out of bounds"),
+		},
+		{
+			name: "jmp register out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmp), 0, 32, byte(ModeRegister),
+			},
+			expected: errors.New("register out of bounds"),
 		},
 	}
 
