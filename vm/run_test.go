@@ -93,17 +93,25 @@ func TestRun(t *testing.T) {
 		{
 			name: "jmp immediate",
 			program: []byte{
-				byte(OpcodeJmp), 0, 4, byte(ModeImmediate),
+				byte(OpcodeLoadImmediate), 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 1,
+				byte(OpcodeJmpImmediate), 0, 16, 0,
+				byte(OpcodeAdd), 0, 0, 1, // This should get skipped.
+				byte(OpcodeAdd), 0, 0, 1,
 			},
-			expected: [32]int64{},
+			expected: [32]int64{2, 1},
 		},
 		{
 			name: "jmp register",
 			program: []byte{
-				byte(OpcodeLoadImmediate), 0, 0, 8,
-				byte(OpcodeJmp), 0, 0, byte(ModeRegister),
+				byte(OpcodeLoadImmediate), 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 1,
+				byte(OpcodeLoadImmediate), 2, 0, 20,
+				byte(OpcodeJmpRegister), 0, 2, 0,
+				byte(OpcodeAdd), 0, 0, 1, // This should get skipped.
+				byte(OpcodeAdd), 0, 0, 1,
 			},
-			expected: [32]int64{8},
+			expected: [32]int64{2, 1, 20},
 		},
 	}
 
@@ -209,20 +217,29 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unknown opcode: 11111111"),
 		},
 		{
-			name: "jmp target out of bounds",
+			name: "jmp immediate target out of bounds",
 			program: []byte{
 				0x00,
-				byte(OpcodeJmp), 0, 255, byte(ModeImmediate),
+				byte(OpcodeJmpImmediate), 255, 255, 255,
 			},
-			expected: errors.New("target address out of bounds"),
+			expected: errors.New("memory address out of bounds"),
 		},
 		{
-			name: "jmp register out of bounds",
+			name: "jmp register target out of bounds",
 			program: []byte{
 				0x00,
-				byte(OpcodeJmp), 0, 32, byte(ModeRegister),
+				byte(OpcodeJmpRegister), 0, 32, 0,
 			},
 			expected: errors.New("register out of bounds"),
+		},
+		{
+			name: "jmp register memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 12,
+				byte(OpcodeJmpRegister), 4, 0, 0,
+			},
+			expected: errors.New("memory address out of bounds"),
 		},
 	}
 

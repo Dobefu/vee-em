@@ -26,6 +26,8 @@ const (
 	// OpcodeMod takes the modulo of two values from the stack.
 	OpcodeMod
 
-	// OpcodeJmp jumps to an address.
-	OpcodeJmp
+	// OpcodeJmpImmediate jumps to an address.
+	OpcodeJmpImmediate
+	// OpcodeJmpRegister jumps to an address in a register.
+	OpcodeJmpRegister
 )

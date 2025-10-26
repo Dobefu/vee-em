@@ -56,8 +56,12 @@ func (v *VM) Run() error {
 		case OpcodeMod:
 			instructionErr = v.instructionMod(dest, src1, src2)
 
-		case OpcodeJmp:
-			instructionErr = v.instructionJmp(rawSrc1, rawSrc2)
+		case OpcodeJmpImmediate:
+			instructionErr = v.instructionJmpImmediate(rawSrc1)
+			shouldIncrementPC = false
+
+		case OpcodeJmpRegister:
+			instructionErr = v.instructionJmpRegister(rawSrc1)
 			shouldIncrementPC = false
 
 		default:
