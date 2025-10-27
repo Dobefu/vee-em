@@ -5,7 +5,7 @@ import (
 )
 
 func (v *VM) instructionLoadRegister(dest register, rawSrc1 register) error {
-	if rawSrc1 >= register(len(v.registers)) || dest >= register(len(v.registers)) {
+	if rawSrc1 >= NumRegisters || dest >= NumRegisters {
 		return errors.New("register out of bounds")
 	}
 

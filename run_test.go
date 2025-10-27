@@ -12,21 +12,21 @@ func TestRun(t *testing.T) {
 	tests := []struct {
 		name     string
 		program  []byte
-		expected [32]int64
+		expected [NumRegisters]int64
 	}{
 		{
 			name: "nop",
 			program: []byte{
 				byte(OpcodeNop), 0, 0, 0,
 			},
-			expected: [32]int64{},
+			expected: [NumRegisters]int64{},
 		},
 		{
 			name: "load immediate",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 1,
 			},
-			expected: [32]int64{1},
+			expected: [NumRegisters]int64{1},
 		},
 		{
 			name: "load register",
@@ -34,7 +34,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 0, 0, 1,
 				byte(OpcodeLoadRegister), 1, 0, 0,
 			},
-			expected: [32]int64{1, 1},
+			expected: [NumRegisters]int64{1, 1},
 		},
 		{
 			name: "push",
@@ -42,7 +42,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 0, 0, 1,
 				byte(OpcodePush), 0, 0, 0,
 			},
-			expected: [32]int64{1},
+			expected: [NumRegisters]int64{1},
 		},
 		{
 			name: "pop",
@@ -51,7 +51,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodePush), 0, 0, 0,
 				byte(OpcodePop), 1, 0, 0,
 			},
-			expected: [32]int64{1, 1},
+			expected: [NumRegisters]int64{1, 1},
 		},
 		{
 			name: "add",
@@ -60,7 +60,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 2,
 				byte(OpcodeAdd), 2, 0, 1,
 			},
-			expected: [32]int64{1, 2, 3},
+			expected: [NumRegisters]int64{1, 2, 3},
 		},
 		{
 			name: "sub",
@@ -69,7 +69,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 2,
 				byte(OpcodeSub), 2, 0, 1,
 			},
-			expected: [32]int64{1, 2, -1},
+			expected: [NumRegisters]int64{1, 2, -1},
 		},
 		{
 			name: "mul",
@@ -78,7 +78,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 2,
 				byte(OpcodeMul), 2, 0, 1,
 			},
-			expected: [32]int64{2, 2, 4},
+			expected: [NumRegisters]int64{2, 2, 4},
 		},
 		{
 			name: "div",
@@ -87,7 +87,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 2,
 				byte(OpcodeDiv), 2, 0, 1,
 			},
-			expected: [32]int64{4, 2, 2},
+			expected: [NumRegisters]int64{4, 2, 2},
 		},
 		{
 			name: "mod",
@@ -96,7 +96,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 2,
 				byte(OpcodeMod), 2, 0, 1,
 			},
-			expected: [32]int64{5, 2, 1},
+			expected: [NumRegisters]int64{5, 2, 1},
 		},
 		{
 			name: "jmp immediate",
@@ -107,7 +107,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeAdd), 0, 0, 1, // This should get skipped.
 				byte(OpcodeAdd), 0, 0, 1,
 			},
-			expected: [32]int64{2, 1},
+			expected: [NumRegisters]int64{2, 1},
 		},
 		{
 			name: "jmp register",
@@ -119,7 +119,7 @@ func TestRun(t *testing.T) {
 				byte(OpcodeAdd), 0, 0, 1, // This should get skipped.
 				byte(OpcodeAdd), 0, 0, 1,
 			},
-			expected: [32]int64{2, 1, 20},
+			expected: [NumRegisters]int64{2, 1, 20},
 		},
 	}
 
@@ -178,7 +178,7 @@ func TestRunErr(t *testing.T) {
 			name: "load register source out of bounds",
 			program: []byte{
 				0x00,
-				byte(OpcodeLoadRegister), 32, 0, 0,
+				byte(OpcodeLoadRegister), NumRegisters, 0, 0,
 			},
 			expected: errors.New("register out of bounds"),
 		},
@@ -244,7 +244,7 @@ func TestRunErr(t *testing.T) {
 			name: "jmp register target out of bounds",
 			program: []byte{
 				0x00,
-				byte(OpcodeJmpRegister), 0, 32, 0,
+				byte(OpcodeJmpRegister), 0, NumRegisters, 0,
 			},
 			expected: errors.New("register out of bounds"),
 		},

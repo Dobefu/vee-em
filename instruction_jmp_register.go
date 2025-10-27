@@ -5,7 +5,7 @@ import (
 )
 
 func (v *VM) instructionJmpRegister(rawSrc1 register) error {
-	if rawSrc1 >= register(len(v.registers)) {
+	if rawSrc1 >= NumRegisters {
 		return errors.New("register out of bounds")
 	}
 

@@ -6,6 +6,9 @@ type Option func(*VM)
 
 type register = uint64
 
+// NumRegisters is the numbers of registers in the CPU.
+const NumRegisters = 32
+
 // StackSize is the size of the stack in bytes.
 const StackSize = 1024
 
@@ -16,7 +19,7 @@ type VM struct {
 	// The program counter.
 	pc register
 	// The registers to use when storing or loading data.
-	registers [32]int64
+	registers [NumRegisters]int64
 	// The bytecode of the program to execute.
 	program []byte
 	// The stack of the virtual machine.
@@ -30,7 +33,7 @@ func New(program []byte, options ...Option) *VM {
 	vm := &VM{
 		magicHeader: []byte{},
 		pc:          0,
-		registers:   [32]int64{},
+		registers:   [NumRegisters]int64{},
 		program:     program,
 		stack:       [StackSize]int64{},
 		sp:          0,
