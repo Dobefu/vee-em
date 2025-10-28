@@ -28,6 +28,8 @@ const (
 	// OpcodeMod takes the modulo of two values from the stack.
 	OpcodeMod
 
+	// OpcodeAND performs an AND on two values from the stack.
+	OpcodeAND
 	// OpcodeXOR performs an exclusive OR on two values from the stack.
 	OpcodeXOR
 
