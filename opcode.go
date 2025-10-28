@@ -28,6 +28,9 @@ const (
 	// OpcodeMod takes the modulo of two values from the stack.
 	OpcodeMod
 
+	// OpcodeXOR performs an exclusive OR on two values from the stack.
+	OpcodeXOR
+
 	// OpcodeJmpImmediate jumps to an address.
 	OpcodeJmpImmediate
 	// OpcodeJmpRegister jumps to an address in a register.
