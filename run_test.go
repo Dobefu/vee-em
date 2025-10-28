@@ -99,6 +99,15 @@ func TestRun(t *testing.T) {
 			expected: [NumRegisters]int64{5, 2, 1},
 		},
 		{
+			name: "and",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0b10000011,
+				byte(OpcodeLoadImmediate), 1, 0, 0b11000001,
+				byte(OpcodeAND), 2, 0, 1,
+			},
+			expected: [NumRegisters]int64{0b10000011, 0b11000001, 0b10000001},
+		},
+		{
 			name: "xor",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0b00011111,
