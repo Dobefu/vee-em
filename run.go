@@ -43,13 +43,13 @@ func (v *VM) Run() error {
 			instructionErr = v.instructionLoadRegister(dest, rawSrc1)
 
 		case OpcodeAdd:
-			v.registers[dest] = v.registers[src1] + v.registers[src2]
+			instructionErr = v.instructionAdd(dest, src1, src2)
 
 		case OpcodeSub:
-			v.registers[dest] = v.registers[src1] - v.registers[src2]
+			instructionErr = v.instructionSub(dest, src1, src2)
 
 		case OpcodeMul:
-			v.registers[dest] = v.registers[src1] * v.registers[src2]
+			instructionErr = v.instructionMul(dest, src1, src2)
 
 		case OpcodeDiv:
 			instructionErr = v.instructionDiv(dest, src1, src2)
