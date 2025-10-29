@@ -202,6 +202,110 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode push too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodePush),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode pop too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodePop),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode load register too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadRegister),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode add too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeAdd),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode sub too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeSub),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode mul too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeMul),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode div too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeDiv),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode mod too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeMod),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode AND too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeAND),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode OR too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeOR),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode XOR too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeXOR),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode jmp immediate too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpImmediate),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode jmp register too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpRegister),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "division by zero",
 			program: []byte{
 				0x00,
