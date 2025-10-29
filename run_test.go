@@ -130,7 +130,7 @@ func TestRun(t *testing.T) {
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 1,
 				byte(OpcodeLoadImmediate), 1, 0, 1,
-				byte(OpcodeJmpImmediate), 0, 16, 0,
+				byte(OpcodeJmpImmediate), 0, 0, 16,
 				byte(OpcodeAdd), 0, 0, 1, // This should get skipped.
 				byte(OpcodeAdd), 0, 0, 1,
 			},
