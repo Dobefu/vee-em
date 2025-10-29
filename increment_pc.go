@@ -1,10 +1,6 @@
 package vm
 
-import (
-	"fmt"
-)
-
-func (v *VM) incrementPC(opcode Opcode) error {
+func (v *VM) incrementPC(opcode Opcode) {
 	var instructionLen register
 
 	// Note: The instruction length includes the opcode itself.
@@ -53,12 +49,7 @@ func (v *VM) incrementPC(opcode Opcode) error {
 
 	case OpcodeJmpRegister:
 		instructionLen = 2
-
-	default:
-		return fmt.Errorf("unknown opcode: %08b", opcode)
 	}
 
 	v.pc += instructionLen
-
-	return nil
 }

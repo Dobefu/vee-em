@@ -16,12 +16,7 @@ func (v *VM) Run() error {
 		var instructionErr error
 		shouldIncrementPC := true
 
-		opcode, err := v.decodeInstruction()
-
-		if err != nil {
-			instructionErr = err
-			opcode = OpcodeNop
-		}
+		opcode := v.decodeInstruction()
 
 		switch opcode {
 		case OpcodeNop:
@@ -80,11 +75,7 @@ func (v *VM) Run() error {
 		}
 
 		if shouldIncrementPC {
-			instructionErr = v.incrementPC(opcode)
-
-			if instructionErr != nil {
-				return instructionErr
-			}
+			v.incrementPC(opcode)
 		}
 	}
 
