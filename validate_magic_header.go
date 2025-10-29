@@ -8,7 +8,13 @@ import (
 var errInvalidMagicHeader = errors.New("invalid magic header")
 
 func (v *VM) validateMagicHeader() error {
-	if len(v.magicHeader) > len(v.program) {
+	magicHeaderLen := len(v.magicHeader)
+
+	if magicHeaderLen == 0 {
+		return nil
+	}
+
+	if magicHeaderLen > len(v.program) {
 		return errInvalidMagicHeader
 	}
 
