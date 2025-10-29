@@ -6,7 +6,7 @@ import (
 
 func (v *VM) decodeInstruction() (
 	opcode Opcode,
-	dest register,
+	rawDest register,
 	rawSrc1 register,
 	rawSrc2 register,
 	err error,
@@ -16,9 +16,9 @@ func (v *VM) decodeInstruction() (
 	}
 
 	opcode = Opcode(v.program[v.pc])
-	dest = register(v.program[v.pc+1])
+	rawDest = register(v.program[v.pc+1])
 	rawSrc1 = register(v.program[v.pc+2])
 	rawSrc2 = register(v.program[v.pc+3])
 
-	return opcode, dest, rawSrc1, rawSrc2, nil
+	return opcode, rawDest, rawSrc1, rawSrc2, nil
 }

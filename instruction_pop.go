@@ -2,7 +2,9 @@ package vm
 
 import "errors"
 
-func (v *VM) instructionPop(dest register) error {
+func (v *VM) instructionPop(rawDest register) error {
+	dest := rawDest & NumRegistersMask
+
 	if v.sp == 0 {
 		return errors.New("stack underflow")
 	}

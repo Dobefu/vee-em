@@ -16,10 +16,7 @@ func (v *VM) Run() error {
 		var instructionErr error
 		shouldIncrementPC := true
 
-		opcode, dest, rawSrc1, rawSrc2, err := v.decodeInstruction()
-
-		src1 := rawSrc1 & 0x1F
-		src2 := rawSrc2 & 0x1F
+		opcode, rawDest, rawSrc1, rawSrc2, err := v.decodeInstruction()
 
 		if err != nil {
 			instructionErr = err
@@ -31,40 +28,40 @@ func (v *VM) Run() error {
 			// noop
 
 		case OpcodePush:
-			instructionErr = v.instructionPush(src1)
+			instructionErr = v.instructionPush(rawSrc1)
 
 		case OpcodePop:
-			instructionErr = v.instructionPop(dest)
+			instructionErr = v.instructionPop(rawDest)
 
 		case OpcodeLoadImmediate:
-			instructionErr = v.instructionLoadImmediate(dest)
+			instructionErr = v.instructionLoadImmediate(rawDest)
 
 		case OpcodeLoadRegister:
-			instructionErr = v.instructionLoadRegister(dest, rawSrc1)
+			instructionErr = v.instructionLoadRegister(rawDest, rawSrc1)
 
 		case OpcodeAdd:
-			instructionErr = v.instructionAdd(dest, src1, src2)
+			instructionErr = v.instructionAdd(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeSub:
-			instructionErr = v.instructionSub(dest, src1, src2)
+			instructionErr = v.instructionSub(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeMul:
-			instructionErr = v.instructionMul(dest, src1, src2)
+			instructionErr = v.instructionMul(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeDiv:
-			instructionErr = v.instructionDiv(dest, src1, src2)
+			instructionErr = v.instructionDiv(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeMod:
-			instructionErr = v.instructionMod(dest, src1, src2)
+			instructionErr = v.instructionMod(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeAND:
-			instructionErr = v.instructionAND(dest, src1, src2)
+			instructionErr = v.instructionAND(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeOR:
-			instructionErr = v.instructionOR(dest, src1, src2)
+			instructionErr = v.instructionOR(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeXOR:
-			instructionErr = v.instructionXOR(dest, src1, src2)
+			instructionErr = v.instructionXOR(rawDest, rawSrc1, rawSrc2)
 
 		case OpcodeJmpImmediate:
 			instructionErr = v.instructionJmpImmediate(rawSrc1)

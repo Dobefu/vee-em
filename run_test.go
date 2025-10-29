@@ -202,14 +202,6 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
-			name: "load register source out of bounds",
-			program: []byte{
-				0x00,
-				byte(OpcodeLoadRegister), NumRegisters, 0, 0,
-			},
-			expected: errors.New("register out of bounds"),
-		},
-		{
 			name: "division by zero",
 			program: []byte{
 				0x00,

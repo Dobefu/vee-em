@@ -7,7 +7,11 @@ type Option func(*VM)
 type register = uint64
 
 // NumRegisters is the numbers of registers in the CPU.
+// Please note that this has to be a power of two.
 const NumRegisters = 32
+
+// NumRegistersMask is the bitmask to use when masking a raw register.
+const NumRegistersMask = NumRegisters - 1
 
 // StackSize is the size of the stack in bytes.
 const StackSize = 1024
