@@ -5,7 +5,7 @@ import (
 )
 
 func (v *VM) instructionJmpImmediate(rawSrc1 register) error {
-	if rawSrc1 >= register(len(v.program)) {
+	if rawSrc1+3 >= register(len(v.program)) {
 		return errors.New("memory address out of bounds")
 	}
 

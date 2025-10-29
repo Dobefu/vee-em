@@ -11,7 +11,7 @@ func (v *VM) instructionJmpRegister(rawSrc1 register) error {
 
 	val := v.registers[rawSrc1]
 
-	if val < 0 || val >= int64(len(v.program)) {
+	if val < 0 || val+3 >= int64(len(v.program)) {
 		return errors.New("memory address out of bounds")
 	}
 
