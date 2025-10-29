@@ -11,7 +11,7 @@ func (v *VM) decodeInstruction() (
 	rawSrc2 register,
 	err error,
 ) {
-	if v.pc+3 >= register(len(v.program)) {
+	if v.pc+3 > register(len(v.program)) {
 		return 0, 0, 0, 0, errors.New("unexpected end of program")
 	}
 
