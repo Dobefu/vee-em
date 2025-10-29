@@ -30,6 +30,8 @@ const (
 
 	// OpcodeAND performs an AND on two values from the stack.
 	OpcodeAND
+	// OpcodeOR performs an OR on two values from the stack.
+	OpcodeOR
 	// OpcodeXOR performs an exclusive OR on two values from the stack.
 	OpcodeXOR
 
