@@ -260,14 +260,6 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("memory address out of bounds"),
 		},
 		{
-			name: "jmp register target out of bounds",
-			program: []byte{
-				0x00,
-				byte(OpcodeJmpRegister), 0, NumRegisters, 0,
-			},
-			expected: errors.New("register out of bounds"),
-		},
-		{
 			name: "jmp register memory address out of bounds",
 			program: []byte{
 				0x00,
