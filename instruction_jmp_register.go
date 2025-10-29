@@ -4,16 +4,21 @@ import (
 	"errors"
 )
 
-func (v *VM) instructionJmpRegister(rawSrc1 register) error {
+func (v *VM) instructionJmpRegister() error {
+	if v.pc+1 >= register(len(v.program)) {
+		return errors.New("unexpected end of program")
+	}
+
+	rawSrc1 := register(v.program[v.pc+1])
 	src1 := rawSrc1 & NumRegistersMask
 
-	val := v.registers[src1]
+	addr := v.registers[src1]
 
-	if val < 0 || val+3 >= int64(len(v.program)) {
+	if addr < 0 || addr >= int64(len(v.program)) {
 		return errors.New("memory address out of bounds")
 	}
 
-	v.pc = register(val)
+	v.pc = register(addr)
 
 	return nil
 }

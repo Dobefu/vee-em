@@ -16,7 +16,7 @@ func (v *VM) Run() error {
 		var instructionErr error
 		shouldIncrementPC := true
 
-		opcode, rawDest, rawSrc1, rawSrc2, err := v.decodeInstruction()
+		opcode, err := v.decodeInstruction()
 
 		if err != nil {
 			instructionErr = err
@@ -28,47 +28,47 @@ func (v *VM) Run() error {
 			// noop
 
 		case OpcodePush:
-			instructionErr = v.instructionPush(rawSrc1)
+			instructionErr = v.instructionPush()
 
 		case OpcodePop:
-			instructionErr = v.instructionPop(rawDest)
+			instructionErr = v.instructionPop()
 
 		case OpcodeLoadImmediate:
-			instructionErr = v.instructionLoadImmediate(rawDest)
+			instructionErr = v.instructionLoadImmediate()
 
 		case OpcodeLoadRegister:
-			instructionErr = v.instructionLoadRegister(rawDest, rawSrc1)
+			instructionErr = v.instructionLoadRegister()
 
 		case OpcodeAdd:
-			instructionErr = v.instructionAdd(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionAdd()
 
 		case OpcodeSub:
-			instructionErr = v.instructionSub(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionSub()
 
 		case OpcodeMul:
-			instructionErr = v.instructionMul(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionMul()
 
 		case OpcodeDiv:
-			instructionErr = v.instructionDiv(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionDiv()
 
 		case OpcodeMod:
-			instructionErr = v.instructionMod(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionMod()
 
 		case OpcodeAND:
-			instructionErr = v.instructionAND(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionAND()
 
 		case OpcodeOR:
-			instructionErr = v.instructionOR(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionOR()
 
 		case OpcodeXOR:
-			instructionErr = v.instructionXOR(rawDest, rawSrc1, rawSrc2)
+			instructionErr = v.instructionXOR()
 
 		case OpcodeJmpImmediate:
 			instructionErr = v.instructionJmpImmediate()
 			shouldIncrementPC = false
 
 		case OpcodeJmpRegister:
-			instructionErr = v.instructionJmpRegister(rawSrc1)
+			instructionErr = v.instructionJmpRegister()
 			shouldIncrementPC = false
 
 		default:
@@ -80,7 +80,11 @@ func (v *VM) Run() error {
 		}
 
 		if shouldIncrementPC {
-			v.incrementPC()
+			instructionErr = v.incrementPC(opcode)
+
+			if instructionErr != nil {
+				return instructionErr
+			}
 		}
 	}
 

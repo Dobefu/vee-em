@@ -1,8 +1,15 @@
 package vm
 
-import "errors"
+import (
+	"errors"
+)
 
-func (v *VM) instructionPop(rawDest register) error {
+func (v *VM) instructionPop() error {
+	if v.pc+1 >= register(len(v.program)) {
+		return errors.New("unexpected end of program")
+	}
+
+	rawDest := register(v.program[v.pc+1])
 	dest := rawDest & NumRegistersMask
 
 	if v.sp == 0 {

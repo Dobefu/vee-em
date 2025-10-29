@@ -1,19 +1,22 @@
 package vm
 
 import (
+	"encoding/binary"
 	"errors"
 )
 
 func (v *VM) instructionJmpImmediate() error {
-	highByte := int64(v.program[v.pc+2]) << 8
-	lowByte := int64(v.program[v.pc+3])
-	addr := highByte | lowByte
+	if v.pc+8 >= register(len(v.program)) {
+		return errors.New("unexpected end of program")
+	}
 
-	if addr < 0 || addr+3 >= int64(len(v.program)) {
+	val := int64(binary.BigEndian.Uint64(v.program[v.pc+1 : v.pc+9])) // #nosec: G115
+
+	if val < 0 || val >= int64(len(v.program)) {
 		return errors.New("memory address out of bounds")
 	}
 
-	v.pc = register(addr)
+	v.pc = register(val)
 
 	return nil
 }
