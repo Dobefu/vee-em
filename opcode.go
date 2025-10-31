@@ -17,26 +17,28 @@ const (
 	// OpcodeLoadRegister loads a value from a register into another register.
 	OpcodeLoadRegister
 
-	// OpcodeAdd adds two values from the stack.
+	// OpcodeAdd adds two values.
 	OpcodeAdd
-	// OpcodeSub subtracts two values from the stack.
+	// OpcodeSub subtracts two values.
 	OpcodeSub
-	// OpcodeMul multiplies two values from the stack.
+	// OpcodeMul multiplies two values.
 	OpcodeMul
-	// OpcodeDiv divides two values from the stack.
+	// OpcodeDiv divides two values.
 	OpcodeDiv
-	// OpcodeMod takes the modulo of two values from the stack.
+	// OpcodeMod takes the modulo of two values.
 	OpcodeMod
 
-	// OpcodeAND performs an AND on two values from the stack.
+	// OpcodeAND performs an AND on two values.
 	OpcodeAND
-	// OpcodeOR performs an OR on two values from the stack.
+	// OpcodeOR performs an OR on two values.
 	OpcodeOR
-	// OpcodeXOR performs an exclusive OR on two values from the stack.
+	// OpcodeXOR performs an exclusive OR on two values.
 	OpcodeXOR
 
 	// OpcodeJmpImmediate jumps to an address.
 	OpcodeJmpImmediate
+	// OpcodeJmpImmediateIfZero jumps to an address if a value is zero.
+	OpcodeJmpImmediateIfZero
 	// OpcodeJmpRegister jumps to an address in a register.
 	OpcodeJmpRegister
 )
