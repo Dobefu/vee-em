@@ -6,9 +6,9 @@ import (
 
 func (v *VM) instructionJmpRegister(
 	instructionStart register,
-	instructionLen register,
+	instructionEnd register,
 ) error {
-	if instructionStart+instructionLen-1 >= v.programLen {
+	if instructionEnd > v.programLen {
 		return errors.New("unexpected end of program")
 	}
 

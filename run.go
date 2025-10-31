@@ -19,6 +19,7 @@ func (v *VM) Run() error {
 
 		instructionLen := v.getInstructionLen(opcode)
 		instructionStart := v.pc
+		instructionEnd := instructionStart + instructionLen
 		v.pc += instructionLen
 
 		switch opcode {
@@ -26,46 +27,46 @@ func (v *VM) Run() error {
 			// noop
 
 		case OpcodePush:
-			instructionErr = v.instructionPush(instructionStart, instructionLen)
+			instructionErr = v.instructionPush(instructionStart, instructionEnd)
 
 		case OpcodePop:
-			instructionErr = v.instructionPop(instructionStart, instructionLen)
+			instructionErr = v.instructionPop(instructionStart, instructionEnd)
 
 		case OpcodeLoadImmediate:
-			instructionErr = v.instructionLoadImmediate(instructionStart, instructionLen)
+			instructionErr = v.instructionLoadImmediate(instructionStart, instructionEnd)
 
 		case OpcodeLoadRegister:
-			instructionErr = v.instructionLoadRegister(instructionStart, instructionLen)
+			instructionErr = v.instructionLoadRegister(instructionStart, instructionEnd)
 
 		case OpcodeAdd:
-			instructionErr = v.instructionAdd(instructionStart, instructionLen)
+			instructionErr = v.instructionAdd(instructionStart, instructionEnd)
 
 		case OpcodeSub:
-			instructionErr = v.instructionSub(instructionStart, instructionLen)
+			instructionErr = v.instructionSub(instructionStart, instructionEnd)
 
 		case OpcodeMul:
-			instructionErr = v.instructionMul(instructionStart, instructionLen)
+			instructionErr = v.instructionMul(instructionStart, instructionEnd)
 
 		case OpcodeDiv:
-			instructionErr = v.instructionDiv(instructionStart, instructionLen)
+			instructionErr = v.instructionDiv(instructionStart, instructionEnd)
 
 		case OpcodeMod:
-			instructionErr = v.instructionMod(instructionStart, instructionLen)
+			instructionErr = v.instructionMod(instructionStart, instructionEnd)
 
 		case OpcodeAND:
-			instructionErr = v.instructionAND(instructionStart, instructionLen)
+			instructionErr = v.instructionAND(instructionStart, instructionEnd)
 
 		case OpcodeOR:
-			instructionErr = v.instructionOR(instructionStart, instructionLen)
+			instructionErr = v.instructionOR(instructionStart, instructionEnd)
 
 		case OpcodeXOR:
-			instructionErr = v.instructionXOR(instructionStart, instructionLen)
+			instructionErr = v.instructionXOR(instructionStart, instructionEnd)
 
 		case OpcodeJmpImmediate:
-			instructionErr = v.instructionJmpImmediate(instructionStart, instructionLen)
+			instructionErr = v.instructionJmpImmediate(instructionStart, instructionEnd)
 
 		case OpcodeJmpRegister:
-			instructionErr = v.instructionJmpRegister(instructionStart, instructionLen)
+			instructionErr = v.instructionJmpRegister(instructionStart, instructionEnd)
 
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)

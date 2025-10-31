@@ -7,16 +7,16 @@ import (
 
 func (v *VM) instructionLoadImmediate(
 	instructionStart register,
-	instructionLen register,
+	instructionEnd register,
 ) error {
-	if instructionStart+instructionLen-1 >= v.programLen {
+	if instructionEnd > v.programLen {
 		return errors.New("unexpected end of program")
 	}
 
 	dest := register(v.program[instructionStart+1]) & NumRegistersMask
 
 	val := int64(binary.BigEndian.Uint64(
-		v.program[instructionStart+2 : instructionStart+instructionLen],
+		v.program[instructionStart+2 : instructionEnd],
 	)) // #nosec: G115
 
 	v.registers[dest] = val
