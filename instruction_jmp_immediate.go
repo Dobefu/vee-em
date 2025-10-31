@@ -9,19 +9,19 @@ func (v *VM) instructionJmpImmediate(
 	instructionStart register,
 	instructionLen register,
 ) error {
-	if instructionStart+instructionLen-1 >= register(len(v.program)) {
+	if instructionStart+instructionLen-1 >= v.programLen {
 		return errors.New("unexpected end of program")
 	}
 
-	val := int64(binary.BigEndian.Uint64(
+	addr := binary.BigEndian.Uint64(
 		v.program[instructionStart+1 : instructionStart+instructionLen],
-	)) // #nosec: G115
+	)
 
-	if val < 0 || val >= int64(len(v.program)) {
+	if addr >= v.programLen {
 		return errors.New("memory address out of bounds")
 	}
 
-	v.pc = register(val)
+	v.pc = addr
 
 	return nil
 }

@@ -12,7 +12,7 @@ func (v *VM) Run() error {
 		return err
 	}
 
-	for v.pc < uint64(len(v.program)) {
+	for v.pc < v.programLen {
 		var instructionErr error
 
 		opcode := v.decodeInstruction()

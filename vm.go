@@ -26,6 +26,8 @@ type VM struct {
 	registers [NumRegisters]int64
 	// The bytecode of the program to execute.
 	program []byte
+	// The length of the program.
+	programLen register
 	// The stack of the virtual machine.
 	stack [StackSize]int64
 	// The stack pointer of the virtual machine.
@@ -39,6 +41,7 @@ func New(program []byte, options ...Option) *VM {
 		pc:          0,
 		registers:   [NumRegisters]int64{},
 		program:     program,
+		programLen:  register(len(program)),
 		stack:       [StackSize]int64{},
 		sp:          0,
 	}

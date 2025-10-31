@@ -9,7 +9,7 @@ func (v *VM) instructionLoadImmediate(
 	instructionStart register,
 	instructionLen register,
 ) error {
-	if instructionStart+instructionLen-1 >= register(len(v.program)) {
+	if instructionStart+instructionLen-1 >= v.programLen {
 		return errors.New("unexpected end of program")
 	}
 

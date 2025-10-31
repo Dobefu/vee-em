@@ -8,7 +8,7 @@ func (v *VM) instructionJmpRegister(
 	instructionStart register,
 	instructionLen register,
 ) error {
-	if instructionStart+instructionLen-1 >= register(len(v.program)) {
+	if instructionStart+instructionLen-1 >= v.programLen {
 		return errors.New("unexpected end of program")
 	}
 
@@ -17,7 +17,7 @@ func (v *VM) instructionJmpRegister(
 
 	addr := v.registers[src1]
 
-	if addr < 0 || addr >= int64(len(v.program)) {
+	if addr < 0 || uint64(addr) >= v.programLen {
 		return errors.New("memory address out of bounds")
 	}
 
