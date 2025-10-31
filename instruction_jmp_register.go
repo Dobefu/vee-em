@@ -12,9 +12,7 @@ func (v *VM) instructionJmpRegister(
 		return errors.New("unexpected end of program")
 	}
 
-	rawSrc1 := register(v.program[instructionStart+1])
-	src1 := rawSrc1 & NumRegistersMask
-
+	src1 := register(v.program[instructionStart+1]) & NumRegistersMask
 	addr := v.registers[src1]
 
 	if addr < 0 || uint64(addr) >= v.programLen {
