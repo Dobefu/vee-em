@@ -14,57 +14,58 @@ func (v *VM) Run() error {
 
 	for v.pc < uint64(len(v.program)) {
 		var instructionErr error
-		shouldIncrementPC := true
 
 		opcode := v.decodeInstruction()
+
+		instructionLen := v.getInstructionLen(opcode)
+		instructionStart := v.pc
+		v.pc += instructionLen
 
 		switch opcode {
 		case OpcodeNop:
 			// noop
 
 		case OpcodePush:
-			instructionErr = v.instructionPush()
+			instructionErr = v.instructionPush(instructionStart, instructionLen)
 
 		case OpcodePop:
-			instructionErr = v.instructionPop()
+			instructionErr = v.instructionPop(instructionStart, instructionLen)
 
 		case OpcodeLoadImmediate:
-			instructionErr = v.instructionLoadImmediate()
+			instructionErr = v.instructionLoadImmediate(instructionStart, instructionLen)
 
 		case OpcodeLoadRegister:
-			instructionErr = v.instructionLoadRegister()
+			instructionErr = v.instructionLoadRegister(instructionStart, instructionLen)
 
 		case OpcodeAdd:
-			instructionErr = v.instructionAdd()
+			instructionErr = v.instructionAdd(instructionStart, instructionLen)
 
 		case OpcodeSub:
-			instructionErr = v.instructionSub()
+			instructionErr = v.instructionSub(instructionStart, instructionLen)
 
 		case OpcodeMul:
-			instructionErr = v.instructionMul()
+			instructionErr = v.instructionMul(instructionStart, instructionLen)
 
 		case OpcodeDiv:
-			instructionErr = v.instructionDiv()
+			instructionErr = v.instructionDiv(instructionStart, instructionLen)
 
 		case OpcodeMod:
-			instructionErr = v.instructionMod()
+			instructionErr = v.instructionMod(instructionStart, instructionLen)
 
 		case OpcodeAND:
-			instructionErr = v.instructionAND()
+			instructionErr = v.instructionAND(instructionStart, instructionLen)
 
 		case OpcodeOR:
-			instructionErr = v.instructionOR()
+			instructionErr = v.instructionOR(instructionStart, instructionLen)
 
 		case OpcodeXOR:
-			instructionErr = v.instructionXOR()
+			instructionErr = v.instructionXOR(instructionStart, instructionLen)
 
 		case OpcodeJmpImmediate:
-			instructionErr = v.instructionJmpImmediate()
-			shouldIncrementPC = false
+			instructionErr = v.instructionJmpImmediate(instructionStart, instructionLen)
 
 		case OpcodeJmpRegister:
-			instructionErr = v.instructionJmpRegister()
-			shouldIncrementPC = false
+			instructionErr = v.instructionJmpRegister(instructionStart, instructionLen)
 
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
@@ -72,10 +73,6 @@ func (v *VM) Run() error {
 
 		if instructionErr != nil {
 			return instructionErr
-		}
-
-		if shouldIncrementPC {
-			v.incrementPC(opcode)
 		}
 	}
 

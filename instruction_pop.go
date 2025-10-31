@@ -4,12 +4,15 @@ import (
 	"errors"
 )
 
-func (v *VM) instructionPop() error {
-	if v.pc+1 >= register(len(v.program)) {
+func (v *VM) instructionPop(
+	instructionStart register,
+	instructionLen register,
+) error {
+	if instructionStart+instructionLen-1 >= register(len(v.program)) {
 		return errors.New("unexpected end of program")
 	}
 
-	rawDest := register(v.program[v.pc+1])
+	rawDest := register(v.program[instructionStart+1])
 	dest := rawDest & NumRegistersMask
 
 	if v.sp == 0 {

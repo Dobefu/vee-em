@@ -4,12 +4,15 @@ import (
 	"errors"
 )
 
-func (v *VM) instructionJmpRegister() error {
-	if v.pc+1 >= register(len(v.program)) {
+func (v *VM) instructionJmpRegister(
+	instructionStart register,
+	instructionLen register,
+) error {
+	if instructionStart+instructionLen-1 >= register(len(v.program)) {
 		return errors.New("unexpected end of program")
 	}
 
-	rawSrc1 := register(v.program[v.pc+1])
+	rawSrc1 := register(v.program[instructionStart+1])
 	src1 := rawSrc1 & NumRegistersMask
 
 	addr := v.registers[src1]

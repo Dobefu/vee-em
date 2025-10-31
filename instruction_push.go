@@ -4,12 +4,15 @@ import (
 	"errors"
 )
 
-func (v *VM) instructionPush() error {
-	if v.pc+1 >= register(len(v.program)) {
+func (v *VM) instructionPush(
+	instructionStart register,
+	instructionLen register,
+) error {
+	if instructionStart+instructionLen-1 >= register(len(v.program)) {
 		return errors.New("unexpected end of program")
 	}
 
-	rawSrc1 := register(v.program[v.pc+1])
+	rawSrc1 := register(v.program[instructionStart+1])
 	src1 := rawSrc1 & NumRegistersMask
 
 	if v.sp >= uint64(len(v.stack)) {
