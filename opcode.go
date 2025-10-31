@@ -47,4 +47,7 @@ const (
 	OpcodeJmpRegisterIfZero
 	// OpcodeJmpRegisterIfNotZero jumps to an address in a register if a value is not zero.
 	OpcodeJmpRegisterIfNotZero
+
+	// OpcodeCMP compares two registers and sets flags.
+	OpcodeCMP
 )

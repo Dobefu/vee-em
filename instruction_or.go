@@ -18,5 +18,8 @@ func (v *VM) instructionOR(
 
 	v.registers[dest] = v.registers[src1] | v.registers[src2]
 
+	v.flags.isZero = v.registers[dest] == 0
+	v.flags.isNegative = v.registers[dest] < 0
+
 	return nil
 }

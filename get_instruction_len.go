@@ -60,6 +60,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeJmpRegisterIfNotZero:
 		return 3
 
+	case OpcodeCMP:
+		return 3
+
 	default:
 		return 0
 	}

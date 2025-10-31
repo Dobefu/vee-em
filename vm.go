@@ -16,6 +16,18 @@ const NumRegistersMask = NumRegisters - 1
 // StackSize is the size of the stack in bytes.
 const StackSize = 1024
 
+// flags defines the flags of the CPU.
+type flags struct {
+	// Whether the result of the last operation was zero.
+	isZero bool
+	// Whether the result of the last operation was negative.
+	isNegative bool
+	// Whether the last operation had a carry flag.
+	hasCarry bool
+	// Whether the last operation had an overflow flag.
+	hasOverflow bool
+}
+
 // VM defines the virtual machine.
 type VM struct {
 	// The magic header of the program.
@@ -32,6 +44,8 @@ type VM struct {
 	stack [StackSize]int64
 	// The stack pointer of the virtual machine.
 	sp register
+	// The flags register.
+	flags flags
 }
 
 // New creates a new VM instance.
@@ -44,6 +58,12 @@ func New(program []byte, options ...Option) *VM {
 		programLen:  register(len(program)),
 		stack:       [StackSize]int64{},
 		sp:          0,
+		flags: flags{
+			isZero:      false,
+			isNegative:  false,
+			hasCarry:    false,
+			hasOverflow: false,
+		},
 	}
 
 	for _, option := range options {

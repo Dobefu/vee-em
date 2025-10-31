@@ -10,23 +10,36 @@ func TestRun(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name     string
-		program  []byte
-		expected [NumRegisters]int64
+		name              string
+		program           []byte
+		expectedRegisters [NumRegisters]int64
+		expectedFlags     flags
 	}{
 		{
 			name: "nop",
 			program: []byte{
 				byte(OpcodeNop),
 			},
-			expected: [NumRegisters]int64{},
+			expectedRegisters: [NumRegisters]int64{},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "load immediate",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 			},
-			expected: [NumRegisters]int64{1},
+			expectedRegisters: [NumRegisters]int64{1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "load register",
@@ -34,7 +47,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodeLoadRegister), 1, 0,
 			},
-			expected: [NumRegisters]int64{1, 1},
+			expectedRegisters: [NumRegisters]int64{1, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "push",
@@ -42,7 +61,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodePush), 0,
 			},
-			expected: [NumRegisters]int64{1},
+			expectedRegisters: [NumRegisters]int64{1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "pop",
@@ -51,7 +76,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodePush), 0,
 				byte(OpcodePop), 1,
 			},
-			expected: [NumRegisters]int64{1, 1},
+			expectedRegisters: [NumRegisters]int64{1, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "add",
@@ -60,7 +91,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
 				byte(OpcodeAdd), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{1, 2, 3},
+			expectedRegisters: [NumRegisters]int64{1, 2, 3},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "sub",
@@ -69,7 +106,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
 				byte(OpcodeSub), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{1, 2, -1},
+			expectedRegisters: [NumRegisters]int64{1, 2, -1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  true,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "mul",
@@ -78,7 +121,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
 				byte(OpcodeMul), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{2, 2, 4},
+			expectedRegisters: [NumRegisters]int64{2, 2, 4},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "div",
@@ -87,7 +136,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
 				byte(OpcodeDiv), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{4, 2, 2},
+			expectedRegisters: [NumRegisters]int64{4, 2, 2},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "mod",
@@ -96,7 +151,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
 				byte(OpcodeMod), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{5, 2, 1},
+			expectedRegisters: [NumRegisters]int64{5, 2, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "and",
@@ -105,7 +166,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 0b11000001,
 				byte(OpcodeAND), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{0b10000011, 0b11000001, 0b10000001},
+			expectedRegisters: [NumRegisters]int64{0b10000011, 0b11000001, 0b10000001},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "or",
@@ -114,7 +181,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 0b11000001,
 				byte(OpcodeOR), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{0b10000011, 0b11000001, 0b11000011},
+			expectedRegisters: [NumRegisters]int64{0b10000011, 0b11000001, 0b11000011},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "xor",
@@ -123,7 +196,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 0b11111000,
 				byte(OpcodeXOR), 2, 0, 1,
 			},
-			expected: [NumRegisters]int64{0b00011111, 0b11111000, 0b11100111},
+			expectedRegisters: [NumRegisters]int64{0b00011111, 0b11111000, 0b11100111},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp immediate",
@@ -134,7 +213,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
 				byte(OpcodeAdd), 0, 0, 0,
 			},
-			expected: [NumRegisters]int64{2, 1},
+			expectedRegisters: [NumRegisters]int64{2, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp register",
@@ -146,7 +231,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
 				byte(OpcodeAdd), 0, 0, 0,
 			},
-			expected: [NumRegisters]int64{2, 1, 36},
+			expectedRegisters: [NumRegisters]int64{2, 1, 36},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp immediate if zero",
@@ -155,7 +246,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpImmediateIfZero), 0, 0, 0, 0, 0, 0, 0, 0, 20,
 				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
 			},
-			expected: [NumRegisters]int64{0},
+			expectedRegisters: [NumRegisters]int64{0},
+			expectedFlags: flags{
+				isZero:      true,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp immediate if zero (not zero)",
@@ -164,7 +261,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpImmediateIfZero), 0, 0, 0, 0, 0, 0, 0, 0, 20,
 				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
 			},
-			expected: [NumRegisters]int64{2},
+			expectedRegisters: [NumRegisters]int64{2},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp immediate if not zero",
@@ -173,7 +276,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpImmediateIfNotZero), 0, 0, 0, 0, 0, 0, 0, 0, 23,
 				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
 			},
-			expected: [NumRegisters]int64{1},
+			expectedRegisters: [NumRegisters]int64{1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp immediate if not zero (zero)",
@@ -183,7 +292,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpImmediateIfNotZero), 0, 0, 0, 0, 0, 0, 0, 0, 33,
 				byte(OpcodeAdd), 0, 0, 1, // This should not get skipped.
 			},
-			expected: [NumRegisters]int64{1, 1},
+			expectedRegisters: [NumRegisters]int64{1, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp register if zero",
@@ -193,7 +308,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpRegisterIfZero), 0, 1,
 				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
 			},
-			expected: [NumRegisters]int64{0, 23},
+			expectedRegisters: [NumRegisters]int64{0, 23},
+			expectedFlags: flags{
+				isZero:      true,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp register if zero (not zero)",
@@ -203,7 +324,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpRegisterIfZero), 0, 1,
 				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
 			},
-			expected: [NumRegisters]int64{2, 23},
+			expectedRegisters: [NumRegisters]int64{2, 23},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp register if not zero",
@@ -213,7 +340,13 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpRegisterIfNotZero), 0, 1,
 				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
 			},
-			expected: [NumRegisters]int64{1, 26},
+			expectedRegisters: [NumRegisters]int64{1, 26},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 		{
 			name: "jmp register if not zero (zero)",
@@ -224,7 +357,28 @@ func TestRun(t *testing.T) {
 				byte(OpcodeJmpRegisterIfNotZero), 0, 0,
 				byte(OpcodeAdd), 0, 0, 1, // This should not get skipped.
 			},
-			expected: [NumRegisters]int64{1, 1, 36},
+			expectedRegisters: [NumRegisters]int64{1, 1, 36},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "cmp",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeCMP), 0, 1,
+			},
+			expectedRegisters: [NumRegisters]int64{1, 2},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  true,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
 		},
 	}
 
@@ -239,11 +393,19 @@ func TestRun(t *testing.T) {
 				t.Fatalf("expected no error, got %s", err.Error())
 			}
 
-			if !reflect.DeepEqual(vm.registers, test.expected) {
+			if !reflect.DeepEqual(vm.registers, test.expectedRegisters) {
 				t.Fatalf(
 					"expected registers to be %v, got %v",
-					test.expected,
+					test.expectedRegisters,
 					vm.registers,
+				)
+			}
+
+			if vm.flags != test.expectedFlags {
+				t.Fatalf(
+					"expected flags to be %v, got %v",
+					test.expectedFlags,
+					vm.flags,
 				)
 			}
 		})
@@ -412,6 +574,14 @@ func TestRunErr(t *testing.T) {
 			program: []byte{
 				0x00,
 				byte(OpcodeJmpRegisterIfNotZero),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode CMP too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeCMP),
 			},
 			expected: errors.New("unexpected end of program"),
 		},
