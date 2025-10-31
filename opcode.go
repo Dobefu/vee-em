@@ -39,6 +39,8 @@ const (
 	OpcodeJmpImmediate
 	// OpcodeJmpImmediateIfZero jumps to an address if a value is zero.
 	OpcodeJmpImmediateIfZero
+	// OpcodeJmpImmediateIfNotZero jumps to an address if a value is not zero.
+	OpcodeJmpImmediateIfNotZero
 	// OpcodeJmpRegister jumps to an address in a register.
 	OpcodeJmpRegister
 	// OpcodeJmpRegisterIfZero jumps to an address in a register if a value is zero.
