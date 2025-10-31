@@ -205,6 +205,27 @@ func TestRun(t *testing.T) {
 			},
 			expected: [NumRegisters]int64{2, 23},
 		},
+		{
+			name: "jmp register if not zero",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 26,
+				byte(OpcodeJmpRegisterIfNotZero), 0, 1,
+				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
+			},
+			expected: [NumRegisters]int64{1, 26},
+		},
+		{
+			name: "jmp register if not zero (zero)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeJmpRegisterIfNotZero), 0, 0,
+				byte(OpcodeAdd), 0, 0, 1, // This should not get skipped.
+			},
+			expected: [NumRegisters]int64{1, 1, 36},
+		},
 	}
 
 	for _, test := range tests {
@@ -387,6 +408,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode jmp register if not zero too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpRegisterIfNotZero),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "division by zero",
 			program: []byte{
 				0x00,
@@ -478,6 +507,16 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 24,
 				byte(OpcodeJmpRegisterIfZero), 0, 1,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "jmp register if not zero memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 24,
+				byte(OpcodeJmpRegisterIfNotZero), 0, 1,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},

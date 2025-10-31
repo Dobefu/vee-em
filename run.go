@@ -77,6 +77,9 @@ func (v *VM) Run() error {
 		case OpcodeJmpRegisterIfZero:
 			instructionErr = v.instructionJmpRegisterIfZero(instructionStart, instructionEnd)
 
+		case OpcodeJmpRegisterIfNotZero:
+			instructionErr = v.instructionJmpRegisterIfNotZero(instructionStart, instructionEnd)
+
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
 		}
