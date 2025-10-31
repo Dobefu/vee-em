@@ -149,7 +149,7 @@ func TestRun(t *testing.T) {
 			expected: [NumRegisters]int64{2, 1, 36},
 		},
 		{
-			name: "jmp if zero",
+			name: "jmp immediate if zero",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				byte(OpcodeJmpImmediateIfZero), 0, 0, 0, 0, 0, 0, 0, 0, 20,
@@ -158,13 +158,33 @@ func TestRun(t *testing.T) {
 			expected: [NumRegisters]int64{0},
 		},
 		{
-			name: "jmp if zero (not zero)",
+			name: "jmp immediate if zero (not zero)",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodeJmpImmediateIfZero), 0, 0, 0, 0, 0, 0, 0, 0, 20,
 				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
 			},
 			expected: [NumRegisters]int64{2},
+		},
+		{
+			name: "jmp register if zero",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 23,
+				byte(OpcodeJmpRegisterIfZero), 0, 1,
+				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
+			},
+			expected: [NumRegisters]int64{0, 23},
+		},
+		{
+			name: "jmp register if zero (not zero)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 23,
+				byte(OpcodeJmpRegisterIfZero), 0, 1,
+				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
+			},
+			expected: [NumRegisters]int64{2, 23},
 		},
 	}
 
@@ -316,6 +336,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode jmp immediate if zero too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpImmediateIfZero),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "opcode jmp register too few arguments",
 			program: []byte{
 				0x00,
@@ -324,10 +352,10 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
-			name: "opcode jmp if zero too few arguments",
+			name: "opcode jmp register if zero too few arguments",
 			program: []byte{
 				0x00,
-				byte(OpcodeJmpImmediateIfZero),
+				byte(OpcodeJmpRegisterIfZero),
 			},
 			expected: errors.New("unexpected end of program"),
 		},
@@ -390,6 +418,15 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("memory address out of bounds"),
 		},
 		{
+			name: "jmp immediate if zero memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				byte(OpcodeJmpImmediateIfZero), 0, 0, 0, 0, 0, 0, 0, 0, 21,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
 			name: "jmp register memory address out of bounds",
 			program: []byte{
 				0x00,
@@ -399,11 +436,12 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("memory address out of bounds"),
 		},
 		{
-			name: "jmp if zero memory address out of bounds",
+			name: "jmp register if zero memory address out of bounds",
 			program: []byte{
 				0x00,
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				byte(OpcodeJmpImmediateIfZero), 0, 0, 0, 0, 0, 0, 0, 0, 21,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 24,
+				byte(OpcodeJmpRegisterIfZero), 0, 1,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},
