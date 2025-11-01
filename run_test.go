@@ -734,6 +734,44 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "jmp register if less",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 45,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpRegisterIfLess), 2,
+				byte(OpcodeLoadImmediate), 3, 0, 0, 0, 0, 0, 0, 0, 2, // This should get skipped.
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 2,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 2, 45},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  true,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp register if less (not less)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 45,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpRegisterIfLess), 2,
+				byte(OpcodeLoadImmediate), 3, 0, 0, 0, 0, 0, 0, 0, 2, // This should not get skipped.
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 2,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 1, 45, 2},
+			expectedFlags: flags{
+				isZero:      true,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
 			name: "cmp",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -1034,6 +1072,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode jmp register if less too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpRegisterIfLess),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "division by zero",
 			program: []byte{
 				0x00,
@@ -1237,6 +1283,18 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeCMP), 0, 1,
 				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 36,
 				byte(OpcodeJmpRegisterIfGreaterOrEqual), 2,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "jmp register if less memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeJmpRegisterIfLess), 2,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},
