@@ -88,4 +88,6 @@ const (
 
 	// OpcodeCallImmediate calls a function at an immediate address.
 	OpcodeCallImmediate
+	// OpcodeReturn returns from a function call.
+	OpcodeReturn
 )

@@ -916,6 +916,24 @@ func TestRun(t *testing.T) {
 				hasOverflow: false,
 			},
 		},
+		{
+			name: "return",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 33,
+				byte(OpcodePush), 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 100,
+				byte(OpcodeReturn),
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 200,
+			},
+			expectedRegisters: [NumRegisters]int64{42, 200},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
 	}
 
 	for _, test := range tests {
@@ -1535,6 +1553,27 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeCallImmediate), 0, 0, 0, 0, 0, 0, 0, 50,
 			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "return stack underflow",
+			program: []byte{
+				0x00,
+				byte(OpcodeReturn),
+			},
+			expected: errors.New("stack underflow"),
+		},
+		{
+			name: "return memory address out of bounds",
+			program: func() []byte {
+				program := make([]byte, 0, 20)
+				program = append(program, 0x00)
+				program = append(program, byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 50)
+				program = append(program, byte(OpcodePush), 0)
+				program = append(program, byte(OpcodeReturn))
+
+				return program
+			}(),
 			expected: errors.New("memory address out of bounds"),
 		},
 	}

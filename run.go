@@ -137,6 +137,9 @@ func (v *VM) Run() error {
 		case OpcodeCallImmediate:
 			instructionErr = v.instructionCallImmediate(instructionStart, instructionEnd)
 
+		case OpcodeReturn:
+			instructionErr = v.instructionReturn(instructionStart, instructionEnd)
+
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
 		}

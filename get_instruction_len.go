@@ -117,6 +117,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeCallImmediate:
 		return 9
 
+	case OpcodeReturn:
+		return 1
+
 	default:
 		return 0
 	}
