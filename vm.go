@@ -25,10 +25,6 @@ type flags struct {
 	isZero bool
 	// Whether the result of the last operation was negative.
 	isNegative bool
-	// Whether the last operation had a carry flag.
-	hasCarry bool
-	// Whether the last operation had an overflow flag.
-	hasOverflow bool
 }
 
 // VM defines the virtual machine.
@@ -65,10 +61,8 @@ func New(program []byte, options ...Option) *VM {
 		sp:          0,
 		heap:        [HeapSize]int64{},
 		flags: flags{
-			isZero:      false,
-			isNegative:  false,
-			hasCarry:    false,
-			hasOverflow: false,
+			isZero:     false,
+			isNegative: false,
 		},
 	}
 

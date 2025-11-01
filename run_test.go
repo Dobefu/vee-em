@@ -22,10 +22,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -35,10 +33,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -49,10 +45,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -66,10 +60,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{123, 10},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -81,10 +73,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{42, 0},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -95,10 +85,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -110,10 +98,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -125,10 +111,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 2, 3},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -140,10 +124,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 2, -1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -155,10 +137,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 4},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -170,10 +150,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{4, 2, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -185,10 +163,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{5, 2, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -200,10 +176,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{0b10000011, 0b11000001, 0b10000001},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -215,10 +189,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{0b10000011, 0b11000001, 0b11000011},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -230,10 +202,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{0b00011111, 0b11111000, 0b11100111},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -244,10 +214,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{0b00001111, ^int64(0b00001111)},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -259,10 +227,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 3, 8},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -274,10 +240,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{16, 2, 4},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -289,10 +253,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{16, 2, 4},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -304,10 +266,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{-16, 2, -4},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -321,10 +281,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -339,10 +297,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 36},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -354,10 +310,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{0},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -369,10 +323,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -384,10 +336,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -400,10 +350,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -418,10 +366,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -436,10 +382,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{4, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -454,10 +398,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -472,10 +414,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{4, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -490,10 +430,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -508,10 +446,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 2},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -526,10 +462,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -544,10 +478,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -562,10 +494,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -580,10 +510,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 2},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -598,10 +526,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -616,10 +542,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -632,10 +556,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{0, 23},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -648,10 +570,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 23},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -664,10 +584,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 26},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -681,10 +599,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 1, 36},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -700,10 +616,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -719,10 +633,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 45, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -738,10 +650,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 45},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -757,10 +667,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45, 2},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -776,10 +684,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -795,10 +701,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45, 2},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -814,10 +718,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -833,10 +735,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 45, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -852,10 +752,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 45},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -871,10 +769,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45, 2},
 			expectedFlags: flags{
-				isZero:      true,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     true,
+				isNegative: false,
 			},
 		},
 		{
@@ -890,10 +786,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 2, 45},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -909,10 +803,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{2, 1, 45, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -924,10 +816,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{1, 2},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: true,
 			},
 		},
 		{
@@ -940,10 +830,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{42, 100},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -957,10 +845,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{42, 100, 25},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -975,10 +861,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{42, 200},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 		{
@@ -990,10 +874,8 @@ func TestRun(t *testing.T) {
 			},
 			expectedRegisters: [NumRegisters]int64{42},
 			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
+				isZero:     false,
+				isNegative: false,
 			},
 		},
 	}
