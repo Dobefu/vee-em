@@ -60,6 +60,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeJmpImmediateIfGreater:
 		return 9
 
+	case OpcodeJmpImmediateIfGreaterOrEqual:
+		return 9
+
 	case OpcodeJmpImmediateIfLess:
 		return 9
 

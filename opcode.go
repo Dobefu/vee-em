@@ -50,6 +50,8 @@ const (
 	OpcodeJmpImmediateIfNotEqual
 	// OpcodeJmpImmediateIfGreater jumps to an address if flags indicate greater than.
 	OpcodeJmpImmediateIfGreater
+	// OpcodeJmpImmediateIfGreaterOrEqual jumps to an address if flags indicate greater than or equal.
+	OpcodeJmpImmediateIfGreaterOrEqual
 	// OpcodeJmpImmediateIfLess jumps to an address if flags indicate less than.
 	OpcodeJmpImmediateIfLess
 	// OpcodeJmpRegister jumps to an address in a register.
