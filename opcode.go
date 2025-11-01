@@ -72,4 +72,6 @@ const (
 	OpcodeJmpRegisterIfGreaterOrEqual
 	// OpcodeJmpRegisterIfLess jumps to an address in a register if flags indicate less than.
 	OpcodeJmpRegisterIfLess
+	// OpcodeJmpRegisterIfLessOrEqual jumps to an address in a register if flags indicate less than or equal.
+	OpcodeJmpRegisterIfLessOrEqual
 )
