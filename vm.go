@@ -16,6 +16,9 @@ const NumRegistersMask = NumRegisters - 1
 // StackSize is the size of the stack in bytes.
 const StackSize = 1024
 
+// HeapSize is the size of the heap in bytes.
+const HeapSize = 65536
+
 // flags defines the flags of the CPU.
 type flags struct {
 	// Whether the result of the last operation was zero.
@@ -44,6 +47,8 @@ type VM struct {
 	stack [StackSize]int64
 	// The stack pointer of the virtual machine.
 	sp register
+	// The heap memory of the virtual machine.
+	heap [HeapSize]int64
 	// The flags register.
 	flags flags
 }
@@ -58,6 +63,7 @@ func New(program []byte, options ...Option) *VM {
 		programLen:  register(len(program)),
 		stack:       [StackSize]int64{},
 		sp:          0,
+		heap:        [HeapSize]int64{},
 		flags: flags{
 			isZero:      false,
 			isNegative:  false,

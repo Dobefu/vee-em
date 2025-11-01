@@ -56,6 +56,20 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "load memory",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				byte(OpcodeLoadMemory), 1, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{0, 0},
+			expectedFlags: flags{
+				isZero:      true,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
 			name: "push",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -910,6 +924,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode load memory too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadMemory),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "opcode add too few arguments",
 			program: []byte{
 				0x00,
@@ -1353,6 +1375,15 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeCMP), 0, 1,
 				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 36,
 				byte(OpcodeJmpRegisterIfLessOrEqual), 2,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "load memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 1, 0, 0,
+				byte(OpcodeLoadMemory), 1, 0,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},
