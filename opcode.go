@@ -64,4 +64,6 @@ const (
 	OpcodeJmpRegisterIfNotZero
 	// OpcodeJmpRegisterIfEqual jumps to an address in a register if flags indicate equality.
 	OpcodeJmpRegisterIfEqual
+	// OpcodeJmpRegisterIfNotEqual jumps to an address in a register if flags indicate inequality.
+	OpcodeJmpRegisterIfNotEqual
 )
