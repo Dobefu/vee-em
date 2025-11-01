@@ -85,4 +85,7 @@ const (
 	OpcodeJmpRegisterIfLess
 	// OpcodeJmpRegisterIfLessOrEqual jumps to an address in a register if flags indicate less than or equal.
 	OpcodeJmpRegisterIfLessOrEqual
+
+	// OpcodeCallImmediate calls a function at an immediate address.
+	OpcodeCallImmediate
 )
