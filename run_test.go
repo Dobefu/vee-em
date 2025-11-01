@@ -416,6 +416,42 @@ func TestRun(t *testing.T) {
 				hasOverflow: false,
 			},
 		},
+		{
+			name: "jmp immediate if not equal",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
+				byte(OpcodeAdd), 0, 0, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 2},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp immediate if not equal (equal)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
+				byte(OpcodeAdd), 0, 0, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{4, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
 	}
 
 	for _, test := range tests {
@@ -606,6 +642,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode jmp immediate if not equal too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpImmediateIfNotEqual),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "opcode jmp register too few arguments",
 			program: []byte{
 				0x00,
@@ -711,6 +755,15 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodeJmpImmediateIfEqual), 0, 0, 0, 0, 0, 0, 0, 34,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "jmp immediate if not equal memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 34,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},
