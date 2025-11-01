@@ -251,13 +251,28 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
-			name: "shl",
+			name: "shift left",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 3,
 				byte(OpcodeShiftLeft), 2, 0, 1,
 			},
 			expectedRegisters: [NumRegisters]int64{1, 3, 8},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "shift right",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 16,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeShiftRight), 2, 0, 1,
+			},
+			expectedRegisters: [NumRegisters]int64{16, 2, 4},
 			expectedFlags: flags{
 				isZero:      false,
 				isNegative:  false,
@@ -1059,10 +1074,18 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
-			name: "opcode SHL too few arguments",
+			name: "opcode shift left too few arguments",
 			program: []byte{
 				0x00,
 				byte(OpcodeShiftLeft),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode shift right too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeShiftRight),
 			},
 			expected: errors.New("unexpected end of program"),
 		},

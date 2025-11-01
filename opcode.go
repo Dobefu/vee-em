@@ -43,6 +43,8 @@ const (
 	OpcodeNOT
 	// OpcodeShiftLeft performs a bitwise shift left on a value.
 	OpcodeShiftLeft
+	// OpcodeShiftRight performs a bitwise shift right (logical) on a value.
+	OpcodeShiftRight
 
 	// OpcodeCMP compares two registers and sets flags.
 	OpcodeCMP
