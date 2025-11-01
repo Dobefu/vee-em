@@ -83,6 +83,9 @@ func (v *VM) Run() error {
 		case OpcodeJmpImmediateIfGreater:
 			instructionErr = v.instructionJmpImmediateIfGreater(instructionStart, instructionEnd)
 
+		case OpcodeJmpImmediateIfLess:
+			instructionErr = v.instructionJmpImmediateIfLess(instructionStart, instructionEnd)
+
 		case OpcodeJmpRegister:
 			instructionErr = v.instructionJmpRegister(instructionStart, instructionEnd)
 
