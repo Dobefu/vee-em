@@ -42,6 +42,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeXOR:
 		return 4
 
+	case OpcodeCMP:
+		return 3
+
 	case OpcodeJmpImmediate:
 		return 9
 
@@ -90,8 +93,8 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeJmpRegisterIfGreaterOrEqual:
 		return 2
 
-	case OpcodeCMP:
-		return 3
+	case OpcodeJmpRegisterIfLess:
+		return 2
 
 	default:
 		return 0
