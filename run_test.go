@@ -934,6 +934,21 @@ func TestRun(t *testing.T) {
 				hasOverflow: false,
 			},
 		},
+		{
+			name: "halt",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeHalt),
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 100, // This should not get executed.
+			},
+			expectedRegisters: [NumRegisters]int64{42},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
 	}
 
 	for _, test := range tests {

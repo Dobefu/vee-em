@@ -90,4 +90,7 @@ const (
 	OpcodeCallImmediate
 	// OpcodeReturn returns from a function call.
 	OpcodeReturn
+
+	// OpcodeHalt stops execution of the VM.
+	OpcodeHalt
 )

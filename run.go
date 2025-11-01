@@ -140,6 +140,9 @@ func (v *VM) Run() error {
 		case OpcodeReturn:
 			instructionErr = v.instructionReturn(instructionStart, instructionEnd)
 
+		case OpcodeHalt:
+			instructionErr = v.instructionHalt(instructionStart, instructionEnd)
+
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)
 		}
