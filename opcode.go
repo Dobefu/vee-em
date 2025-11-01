@@ -68,4 +68,6 @@ const (
 	OpcodeJmpRegisterIfNotEqual
 	// OpcodeJmpRegisterIfGreater jumps to an address in a register if flags indicate greater than.
 	OpcodeJmpRegisterIfGreater
+	// OpcodeJmpRegisterIfGreaterOrEqual jumps to an address in a register if flags indicate greater than or equal.
+	OpcodeJmpRegisterIfGreaterOrEqual
 )
