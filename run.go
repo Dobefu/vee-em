@@ -62,6 +62,9 @@ func (v *VM) Run() error {
 		case OpcodeXOR:
 			instructionErr = v.instructionXOR(instructionStart, instructionEnd)
 
+		case OpcodeCMP:
+			instructionErr = v.instructionCMP(instructionStart, instructionEnd)
+
 		case OpcodeJmpImmediate:
 			instructionErr = v.instructionJmpImmediate(instructionStart, instructionEnd)
 
@@ -71,6 +74,9 @@ func (v *VM) Run() error {
 		case OpcodeJmpImmediateIfNotZero:
 			instructionErr = v.instructionJmpImmediateIfNotZero(instructionStart, instructionEnd)
 
+		case OpcodeJmpImmediateIfEqual:
+			instructionErr = v.instructionJmpImmediateIfEqual(instructionStart, instructionEnd)
+
 		case OpcodeJmpRegister:
 			instructionErr = v.instructionJmpRegister(instructionStart, instructionEnd)
 
@@ -79,9 +85,6 @@ func (v *VM) Run() error {
 
 		case OpcodeJmpRegisterIfNotZero:
 			instructionErr = v.instructionJmpRegisterIfNotZero(instructionStart, instructionEnd)
-
-		case OpcodeCMP:
-			instructionErr = v.instructionCMP(instructionStart, instructionEnd)
 
 		default:
 			instructionErr = fmt.Errorf("unknown opcode: %08b", opcode)

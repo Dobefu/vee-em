@@ -35,19 +35,21 @@ const (
 	// OpcodeXOR performs an exclusive OR on two values.
 	OpcodeXOR
 
+	// OpcodeCMP compares two registers and sets flags.
+	OpcodeCMP
+
 	// OpcodeJmpImmediate jumps to an address.
 	OpcodeJmpImmediate
 	// OpcodeJmpImmediateIfZero jumps to an address if a value is zero.
 	OpcodeJmpImmediateIfZero
 	// OpcodeJmpImmediateIfNotZero jumps to an address if a value is not zero.
 	OpcodeJmpImmediateIfNotZero
+	// OpcodeJmpImmediateIfEqual jumps to an address if flags indicate equality.
+	OpcodeJmpImmediateIfEqual
 	// OpcodeJmpRegister jumps to an address in a register.
 	OpcodeJmpRegister
 	// OpcodeJmpRegisterIfZero jumps to an address in a register if a value is zero.
 	OpcodeJmpRegisterIfZero
 	// OpcodeJmpRegisterIfNotZero jumps to an address in a register if a value is not zero.
 	OpcodeJmpRegisterIfNotZero
-
-	// OpcodeCMP compares two registers and sets flags.
-	OpcodeCMP
 )
