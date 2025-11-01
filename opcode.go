@@ -48,6 +48,8 @@ const (
 	OpcodeJmpImmediateIfEqual
 	// OpcodeJmpImmediateIfNotEqual jumps to an address if flags indicate inequality.
 	OpcodeJmpImmediateIfNotEqual
+	// OpcodeJmpImmediateIfGreater jumps to an address if flags indicate greater than.
+	OpcodeJmpImmediateIfGreater
 	// OpcodeJmpRegister jumps to an address in a register.
 	OpcodeJmpRegister
 	// OpcodeJmpRegisterIfZero jumps to an address in a register if a value is zero.
