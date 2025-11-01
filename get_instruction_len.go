@@ -57,6 +57,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeShiftRight:
 		return 4
 
+	case OpcodeShiftRightArithmetic:
+		return 4
+
 	case OpcodeCMP:
 		return 3
 

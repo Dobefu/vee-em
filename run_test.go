@@ -281,6 +281,36 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "shift right arithmetic positive",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 16,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeShiftRightArithmetic), 2, 0, 1,
+			},
+			expectedRegisters: [NumRegisters]int64{16, 2, 4},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "shift right arithmetic negative",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 255, 255, 255, 255, 255, 255, 255, 240,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeShiftRightArithmetic), 2, 0, 1,
+			},
+			expectedRegisters: [NumRegisters]int64{-16, 2, -4},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  true,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
 			name: "jmp immediate",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -1152,6 +1182,14 @@ func TestRunErr(t *testing.T) {
 			program: []byte{
 				0x00,
 				byte(OpcodeShiftRight),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode shift right arithmetic too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeShiftRightArithmetic),
 			},
 			expected: errors.New("unexpected end of program"),
 		},

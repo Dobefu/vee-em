@@ -77,6 +77,9 @@ func (v *VM) Run() error {
 		case OpcodeShiftRight:
 			instructionErr = v.instructionShiftRight(instructionStart, instructionEnd)
 
+		case OpcodeShiftRightArithmetic:
+			instructionErr = v.instructionShiftRightArithmetic(instructionStart, instructionEnd)
+
 		case OpcodeCMP:
 			instructionErr = v.instructionCMP(instructionStart, instructionEnd)
 

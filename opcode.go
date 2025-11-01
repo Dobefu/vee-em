@@ -45,6 +45,8 @@ const (
 	OpcodeShiftLeft
 	// OpcodeShiftRight performs a bitwise shift right (logical) on a value.
 	OpcodeShiftRight
+	// OpcodeShiftRightArithmetic performs a bitwise shift right (arithmetic) on a value.
+	OpcodeShiftRightArithmetic
 
 	// OpcodeCMP compares two registers and sets flags.
 	OpcodeCMP
