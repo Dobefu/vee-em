@@ -917,6 +917,23 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "call register",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 25,
+				byte(OpcodeCallRegister), 2,
+				byte(OpcodeAdd), 0, 0, 0,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 100,
+			},
+			expectedRegisters: [NumRegisters]int64{42, 100, 25},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
 			name: "return",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 42,
@@ -1299,6 +1316,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode call register too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeCallRegister),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "division by zero",
 			program: []byte{
 				0x00,
@@ -1567,6 +1592,32 @@ func TestRunErr(t *testing.T) {
 			program: []byte{
 				0x00,
 				byte(OpcodeCallImmediate), 0, 0, 0, 0, 0, 0, 0, 50,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "call register stack overflow",
+			program: func() []byte {
+				program := make([]byte, 0, StackSize*2)
+				program = append(program, 0x00)
+				targetAddr := uint64(12)
+				program = append(program, byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, byte(targetAddr))
+				program = append(program, byte(OpcodeNop))
+
+				for range StackSize + 1 {
+					program = append(program, byte(OpcodeCallRegister), 0)
+				}
+
+				return program
+			}(),
+			expected: errors.New("stack overflow"),
+		},
+		{
+			name: "call register memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 50,
+				byte(OpcodeCallRegister), 0,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},
