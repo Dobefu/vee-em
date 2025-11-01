@@ -48,6 +48,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeXOR:
 		return 4
 
+	case OpcodeNOT:
+		return 3
+
 	case OpcodeCMP:
 		return 3
 

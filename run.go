@@ -68,6 +68,9 @@ func (v *VM) Run() error {
 		case OpcodeXOR:
 			instructionErr = v.instructionXOR(instructionStart, instructionEnd)
 
+		case OpcodeNOT:
+			instructionErr = v.instructionNOT(instructionStart, instructionEnd)
+
 		case OpcodeCMP:
 			instructionErr = v.instructionCMP(instructionStart, instructionEnd)
 

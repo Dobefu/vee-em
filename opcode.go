@@ -39,6 +39,8 @@ const (
 	OpcodeOR
 	// OpcodeXOR performs an exclusive OR on two values.
 	OpcodeXOR
+	// OpcodeNOT performs a bitwise NOT on a value.
+	OpcodeNOT
 
 	// OpcodeCMP compares two registers and sets flags.
 	OpcodeCMP
