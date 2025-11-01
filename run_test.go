@@ -251,6 +251,21 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "shl",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 3,
+				byte(OpcodeShiftLeft), 2, 0, 1,
+			},
+			expectedRegisters: [NumRegisters]int64{1, 3, 8},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
 			name: "jmp immediate",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -1040,6 +1055,14 @@ func TestRunErr(t *testing.T) {
 			program: []byte{
 				0x00,
 				byte(OpcodeNOT),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
+			name: "opcode SHL too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeShiftLeft),
 			},
 			expected: errors.New("unexpected end of program"),
 		},

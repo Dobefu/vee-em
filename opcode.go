@@ -41,6 +41,8 @@ const (
 	OpcodeXOR
 	// OpcodeNOT performs a bitwise NOT on a value.
 	OpcodeNOT
+	// OpcodeShiftLeft performs a bitwise shift left on a value.
+	OpcodeShiftLeft
 
 	// OpcodeCMP compares two registers and sets flags.
 	OpcodeCMP
