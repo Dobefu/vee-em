@@ -301,6 +301,114 @@ func TestRun(t *testing.T) {
 			},
 		},
 		{
+			name: "jmp immediate if equal",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfEqual), 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
+				byte(OpcodeAdd), 0, 0, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp immediate if equal (not equal)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfEqual), 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
+				byte(OpcodeAdd), 0, 0, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{4, 2},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp immediate if not equal",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
+				byte(OpcodeAdd), 0, 0, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 2},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp immediate if not equal (equal)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 36,
+				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
+				byte(OpcodeAdd), 0, 0, 0,
+			},
+			expectedRegisters: [NumRegisters]int64{4, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp immediate if greater",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 2,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfGreater), 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 2, // This should get skipped.
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 2,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 1},
+			expectedFlags: flags{
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "jmp immediate if greater (not greater)",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeCMP), 0, 1,
+				byte(OpcodeJmpImmediateIfGreater), 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 2, // This should not get skipped.
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 2,
+			},
+			expectedRegisters: [NumRegisters]int64{2, 1, 2},
+			expectedFlags: flags{
+				isZero:      true,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
 			name: "jmp register if zero",
 			program: []byte{
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -376,78 +484,6 @@ func TestRun(t *testing.T) {
 			expectedFlags: flags{
 				isZero:      false,
 				isNegative:  true,
-				hasCarry:    false,
-				hasOverflow: false,
-			},
-		},
-		{
-			name: "jmp immediate if equal",
-			program: []byte{
-				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
-				byte(OpcodeCMP), 0, 1,
-				byte(OpcodeJmpImmediateIfEqual), 0, 0, 0, 0, 0, 0, 0, 36,
-				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
-				byte(OpcodeAdd), 0, 0, 0,
-			},
-			expectedRegisters: [NumRegisters]int64{2, 1},
-			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
-			},
-		},
-		{
-			name: "jmp immediate if equal (not equal)",
-			program: []byte{
-				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
-				byte(OpcodeCMP), 0, 1,
-				byte(OpcodeJmpImmediateIfEqual), 0, 0, 0, 0, 0, 0, 0, 36,
-				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
-				byte(OpcodeAdd), 0, 0, 0,
-			},
-			expectedRegisters: [NumRegisters]int64{4, 2},
-			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
-			},
-		},
-		{
-			name: "jmp immediate if not equal",
-			program: []byte{
-				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 2,
-				byte(OpcodeCMP), 0, 1,
-				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 36,
-				byte(OpcodeAdd), 0, 0, 0, // This should get skipped.
-				byte(OpcodeAdd), 0, 0, 0,
-			},
-			expectedRegisters: [NumRegisters]int64{2, 2},
-			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
-				hasCarry:    false,
-				hasOverflow: false,
-			},
-		},
-		{
-			name: "jmp immediate if not equal (equal)",
-			program: []byte{
-				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 1,
-				byte(OpcodeCMP), 0, 1,
-				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 36,
-				byte(OpcodeAdd), 0, 0, 0, // This should not get skipped.
-				byte(OpcodeAdd), 0, 0, 0,
-			},
-			expectedRegisters: [NumRegisters]int64{4, 1},
-			expectedFlags: flags{
-				isZero:      false,
-				isNegative:  false,
 				hasCarry:    false,
 				hasOverflow: false,
 			},
@@ -650,6 +686,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode jmp immediate if greater too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeJmpImmediateIfGreater),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "opcode jmp register too few arguments",
 			program: []byte{
 				0x00,
@@ -764,6 +808,15 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodeJmpImmediateIfNotEqual), 0, 0, 0, 0, 0, 0, 0, 34,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "jmp immediate if greater memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				byte(OpcodeJmpImmediateIfGreater), 0, 0, 0, 0, 0, 0, 0, 34,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},
