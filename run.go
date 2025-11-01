@@ -41,6 +41,9 @@ func (v *VM) Run() error {
 		case OpcodeLoadMemory:
 			instructionErr = v.instructionLoadMemory(instructionStart, instructionEnd)
 
+		case OpcodeStoreMemory:
+			instructionErr = v.instructionStoreMemory(instructionStart, instructionEnd)
+
 		case OpcodeAdd:
 			instructionErr = v.instructionAdd(instructionStart, instructionEnd)
 

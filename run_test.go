@@ -58,12 +58,30 @@ func TestRun(t *testing.T) {
 		{
 			name: "load memory",
 			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 123,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 10,
+				byte(OpcodeStoreMemory), 0, 1,
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				byte(OpcodeLoadMemory), 1, 0,
+				byte(OpcodeLoadMemory), 0, 1,
 			},
-			expectedRegisters: [NumRegisters]int64{0, 0},
+			expectedRegisters: [NumRegisters]int64{123, 10},
 			expectedFlags: flags{
-				isZero:      true,
+				isZero:      false,
+				isNegative:  false,
+				hasCarry:    false,
+				hasOverflow: false,
+			},
+		},
+		{
+			name: "store memory",
+			program: []byte{
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 0,
+				byte(OpcodeStoreMemory), 0, 1,
+			},
+			expectedRegisters: [NumRegisters]int64{42, 0},
+			expectedFlags: flags{
+				isZero:      false,
 				isNegative:  false,
 				hasCarry:    false,
 				hasOverflow: false,
@@ -932,6 +950,14 @@ func TestRunErr(t *testing.T) {
 			expected: errors.New("unexpected end of program"),
 		},
 		{
+			name: "opcode store memory too few arguments",
+			program: []byte{
+				0x00,
+				byte(OpcodeStoreMemory),
+			},
+			expected: errors.New("unexpected end of program"),
+		},
+		{
 			name: "opcode add too few arguments",
 			program: []byte{
 				0x00,
@@ -1384,6 +1410,16 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 1, 0, 0,
 				byte(OpcodeLoadMemory), 1, 0,
+			},
+			expected: errors.New("memory address out of bounds"),
+		},
+		{
+			name: "store memory address out of bounds",
+			program: []byte{
+				0x00,
+				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 42,
+				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 1, 0, 0,
+				byte(OpcodeStoreMemory), 0, 1,
 			},
 			expected: errors.New("memory address out of bounds"),
 		},

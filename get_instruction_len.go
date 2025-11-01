@@ -21,6 +21,9 @@ func (v *VM) getInstructionLen(opcode Opcode) register {
 	case OpcodeLoadMemory:
 		return 3
 
+	case OpcodeStoreMemory:
+		return 3
+
 	case OpcodeAdd:
 		return 4
 
