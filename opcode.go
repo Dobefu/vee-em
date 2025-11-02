@@ -95,6 +95,9 @@ const (
 	// OpcodeReturn returns from a function call.
 	OpcodeReturn
 
+	// OpcodeHostCall calls an external function defined by the host.
+	OpcodeHostCall
+
 	// OpcodeHalt stops execution of the VM.
 	OpcodeHalt
 )

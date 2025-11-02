@@ -146,6 +146,9 @@ func (v *VM) Run() error {
 		case OpcodeReturn:
 			instructionErr = v.instructionReturn(instructionStart, instructionEnd)
 
+		case OpcodeHostCall:
+			instructionErr = v.instructionHostCall(instructionStart, instructionEnd)
+
 		case OpcodeHalt:
 			instructionErr = v.instructionHalt(instructionStart, instructionEnd)
 

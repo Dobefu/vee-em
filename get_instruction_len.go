@@ -43,6 +43,7 @@ var instructionLengths = map[Opcode]register{
 	OpcodeCallImmediate:                9,
 	OpcodeCallRegister:                 2,
 	OpcodeReturn:                       1,
+	OpcodeHostCall:                     11,
 	OpcodeHalt:                         1,
 }
 

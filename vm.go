@@ -47,7 +47,17 @@ type VM struct {
 	heap [HeapSize]int64
 	// The flags register.
 	flags flags
+	// The host call handler for calling external functions.
+	hostCallHandler HostCallHandler
 }
+
+// HostCallHandler defines a handler for calling external functions.
+type HostCallHandler func(
+	functionIndex int64,
+	arg1Reg register,
+	numArgs register,
+	registers [NumRegisters]int64,
+) (int64, error)
 
 // New creates a new VM instance.
 func New(program []byte, options ...Option) *VM {
@@ -64,6 +74,7 @@ func New(program []byte, options ...Option) *VM {
 			isZero:     false,
 			isNegative: false,
 		},
+		hostCallHandler: nil,
 	}
 
 	for _, option := range options {
