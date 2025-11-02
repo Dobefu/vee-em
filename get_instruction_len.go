@@ -47,10 +47,11 @@ var instructionLengths = map[Opcode]register{
 	OpcodeHalt:                         1,
 }
 
-func (v *VM) getInstructionLen(opcode Opcode) register {
-	length, ok := instructionLengths[opcode]
+// GetInstructionLen returns the length of the provided instruction.
+func (v *VM) GetInstructionLen(opcode Opcode) register {
+	length, hasLength := instructionLengths[opcode]
 
-	if !ok {
+	if !hasLength {
 		return 0
 	}
 
