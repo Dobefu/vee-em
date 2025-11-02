@@ -1038,7 +1038,8 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodePop),
 			},
-			expected: errors.New("unexpected end of program"),
+			hostCallHandler: nil,
+			expected:        errors.New("unexpected end of program"),
 		},
 		{
 			name: "opcode load register too few arguments",
@@ -1055,7 +1056,8 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeLoadMemory),
 			},
-			expected: errors.New("unexpected end of program"),
+			hostCallHandler: nil,
+			expected:        errors.New("unexpected end of program"),
 		},
 		{
 			name: "opcode store memory too few arguments",
@@ -1081,7 +1083,8 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeSub),
 			},
-			expected: errors.New("unexpected end of program"),
+			hostCallHandler: nil,
+			expected:        errors.New("unexpected end of program"),
 		},
 		{
 			name: "opcode mul too few arguments",
@@ -1188,7 +1191,8 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeJmpImmediate),
 			},
-			expected: errors.New("unexpected end of program"),
+			hostCallHandler: nil,
+			expected:        errors.New("unexpected end of program"),
 		},
 		{
 			name: "opcode jmp immediate if zero too few arguments",
@@ -1304,7 +1308,8 @@ func TestRunErr(t *testing.T) {
 				0x00,
 				byte(OpcodeJmpRegisterIfNotEqual),
 			},
-			expected: errors.New("unexpected end of program"),
+			hostCallHandler: nil,
+			expected:        errors.New("unexpected end of program"),
 		},
 		{
 			name: "opcode jmp register if greater too few arguments",
@@ -1510,7 +1515,8 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeLoadImmediate), 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				byte(OpcodeJmpImmediateIfLessOrEqual), 0, 0, 0, 0, 0, 0, 0, 34,
 			},
-			expected: errors.New("memory address out of bounds"),
+			hostCallHandler: nil,
+			expected:        errors.New("memory address out of bounds"),
 		},
 		{
 			name: "jmp register memory address out of bounds",
@@ -1530,7 +1536,8 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeLoadImmediate), 1, 0, 0, 0, 0, 0, 0, 0, 24,
 				byte(OpcodeJmpRegisterIfZero), 0, 1,
 			},
-			expected: errors.New("memory address out of bounds"),
+			hostCallHandler: nil,
+			expected:        errors.New("memory address out of bounds"),
 		},
 		{
 			name: "jmp register if not zero memory address out of bounds",
@@ -1553,7 +1560,8 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 36,
 				byte(OpcodeJmpRegisterIfEqual), 2,
 			},
-			expected: errors.New("memory address out of bounds"),
+			hostCallHandler: nil,
+			expected:        errors.New("memory address out of bounds"),
 		},
 		{
 			name: "jmp register if not equal memory address out of bounds",
@@ -1591,7 +1599,8 @@ func TestRunErr(t *testing.T) {
 				byte(OpcodeLoadImmediate), 2, 0, 0, 0, 0, 0, 0, 0, 36,
 				byte(OpcodeJmpRegisterIfGreaterOrEqual), 2,
 			},
-			expected: errors.New("memory address out of bounds"),
+			hostCallHandler: nil,
+			expected:        errors.New("memory address out of bounds"),
 		},
 		{
 			name: "jmp register if less memory address out of bounds",
