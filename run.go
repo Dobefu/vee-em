@@ -17,7 +17,7 @@ func (v *VM) Run() error {
 
 		opcode := v.decodeInstruction()
 
-		instructionLen := v.getInstructionLen(opcode)
+		instructionLen := GetInstructionLen(opcode)
 		instructionStart := v.pc
 		instructionEnd := instructionStart + instructionLen
 		v.pc += instructionLen

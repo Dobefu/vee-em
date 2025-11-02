@@ -1,7 +1,7 @@
 package vm
 
 // Note: The instruction length includes the opcode itself.
-var instructionLengths = map[Opcode]register{
+var instructionLengths = map[Opcode]uint64{
 	OpcodeNop:                          1,
 	OpcodePush:                         2,
 	OpcodePop:                          2,
@@ -48,7 +48,7 @@ var instructionLengths = map[Opcode]register{
 }
 
 // GetInstructionLen returns the length of the provided instruction.
-func (v *VM) GetInstructionLen(opcode Opcode) register {
+func GetInstructionLen(opcode Opcode) uint64 {
 	length, hasLength := instructionLengths[opcode]
 
 	if !hasLength {
